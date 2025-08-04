@@ -1,0 +1,16 @@
+# @install: lix --silent download "gh://github.com/pecheny/jiga#b1ab254587f5218634417db4a3af4c2bd914229f" into jiga/0.0.1/github/b1ab254587f5218634417db4a3af4c2bd914229f
+-lib alayout
+-lib domkit
+-lib fancy
+-lib flgl
+-lib format
+-lib ginp
+-lib hscript
+-lib htext
+-lib hxmath
+-lib openfl
+-lib shimp
+-lib slec
+-lib taxis
+-cp ${HAXE_LIBCACHE}/jiga/0.0.1/github/b1ab254587f5218634417db4a3af4c2bd914229f/src
+-D jiga=0.0.1

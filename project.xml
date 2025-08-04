@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project
+	xmlns="http://lime.openfl.org/project/1.0.4"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://lime.openfl.org/project/1.0.4 http://lime.openfl.org/xsd/project-1.0.4.xsd">
+    <set name="builds_folder" value="."/>
+    <!-- <set name="builds_folder" value="/AndroidBuilds/${project_name}" if="android"/> -->
+
+    <meta title="Taking root. Literally." package="com.shoo.hxjam2025s" version="1.0.0" company="pecheny"/>
+    <!-- <app main="Main" path="${builds_folder}/Export" file="jidungeon"/> -->
+    <app main="Hxjam2025s" path="${builds_folder}/Export" file="jidungeon"/>
+
+    <window antialiasing="4"/>
+    <window background="#252525" fps="120" width="900" height="700" unless="html5"/>
+    <window background="#252525" fps="60" if="html5"/>
+    <source path="src"/>
+
+    <haxelib name="openfl"/>
+    <!-- <haxelib name="tracer"/> -->
+    <haxelib name="ginp"/>
+    <haxelib name="taxis"/>
+    <haxelib name="fancy"/>
+    <haxelib name="fucore"/>
+    <haxelib name="alayout"/>
+    <haxelib name="storage"/>
+    <!-- <haxelib name="hxGeomAlgo"/> -->
+    <!-- <haxelib name="json2object"/> -->
+    <haxelib name="hscript"/>
+    <haxelib name="domkit"/>
+    <haxelib name="jiga"/>
+    <haxelib name="tweenx"/>
+    <haxelib name="uikit-flat"/>
+
+
+    <!-- <haxelib name="hxmath"/> -->
+
+    <haxeflag name="-D" value="dump=pretty" />
+    <haxedef name="openfl_disable_context_cache" value="true"/>
+    <haxedef name="openfl_always_render" value="true"/>
+    <!--    <haxedef name="js-es" value="6"/>-->
+    <!--    <haxedef name="openfl_pool_events" value="true"/>-->
+    <haxeflag name="-dce" value="full"/>
+    <!-- <haxeflag name="-dce" value="no"/> -->
+    <haxeflag name="-D" value="message.reporting=classic" />
+    <haxeflag name="--macro" value='domkit.Macros.registerComponentsPath("dkit.Dkit.$Dkit")'/>
+    <haxeflag name="--macro" value='domkit.Macros.registerComponentsPath("dungsmpl.gui.$")'/>
+
+    <haxeflag name="-D" value="no-deprecation-warnings" />
+    <!-- <library path="Assets/art.swf" preload="true" generate="true"/> -->
+    <assets path="Assets" include="*" rename=""/>
+    <template path="templates" if="html5"/>
+
+
+    <config:android permission="android.permission.WAKE_LOCK" />
+    <config:android permission="android.permission.VIBRATE" />
+    <set name="testing" if="${project.command == test}" />
+    <section unless="testing">
+        <setenv name="ANDROID_GRADLE_TASK" value=":app:bundleRelease" />
+        <config:android minimum-sdk-version="19" target-sdk-version="34" />
+        <architecture name="arm64" if="android"/>
+        <architecture exclude="x86" if="android"/>
+        <certificate path=".cert/upload.jks" alias="nextfl-upload" if="android"/>
+    </section>
+</project>
