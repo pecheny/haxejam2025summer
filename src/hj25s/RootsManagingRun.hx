@@ -1,5 +1,7 @@
 package hj25s;
 
+import haxe.Json;
+import hj25s.GroundsState;
 import openfl.events.MouseEvent;
 import openfl.geom.Point;
 import backends.openfl.SpriteAspectKeeper;
@@ -8,6 +10,7 @@ import bootstrap.GameRunBase;
 
 class RootsManagingRun extends GameRunBase {
     @:once var fui:FuiBuilder;
+    @:once var state:GroundsState;
     var view:RootsManagingView;
     var spr:Sprite;
 
@@ -29,21 +32,40 @@ class RootsManagingRun extends GameRunBase {
         #end
         spr.addEventListener(MouseEvent.CLICK, onClick);
         new SpriteAspectKeeper(view.canvas.ph, spr);
-        for (i in 0...5)
-            addView();
-        var last = views[views.length - 1];
-        last.setState(true);
+        // for (i in 0...5)
+        //     addView();
+        // trace(state);
+        // var dump = state.dump();
+        // sys.io.File.saveContent("state.json", Json.stringify(dump, null, " "));
     }
 
-    function addView() {
-        var data = new RootFragment();
-        if (views.length > 0) {
-            var last = views[views.length - 1];
-            var tip = last.getTip();
-            data.x = tip.x;
-            data.y = tip.y;
-            data.angle = last.rotation + 5;
+    override function startGame() {
+        super.startGame();
+        for (data in state.frags) {
+            addView(data);
         }
+    }
+
+    override function reset() {
+        super.reset();
+        while (spr.numChildren > 0) {
+            spr.removeChildAt(0);
+        }
+        views.resize(0);
+    }
+    
+    
+
+    function addView(data) {
+        // var data = new RootFragment();
+        // if (views.length > 0) {
+        //     var last = views[views.length - 1];
+        //     var tip = last.getTip();
+        //     data.pos.x = tip.x;
+        //     data.pos.y = tip.y;
+        //     data.angle = last.rotation + 5;
+        //     state.frags.push(data);
+        // }
         var view = new RootFragmentView(data);
         view.name = "frag-" + (views.length);
         spr.addChild(view);
@@ -62,19 +84,11 @@ class RootsManagingRun extends GameRunBase {
     }
 }
 
-class RootFragment {
-    public var x:Float = 50;
-    public var y:Float = 0;
-    public var angle:Float = 0;
-
-    public function new() {}
-}
-
 class RootFragmentView extends Sprite {
     public function new(data:RootFragment) {
         super();
-        this.x = data.x;
-        this.y = data.y;
+        this.x = data.pos.x;
+        this.y = data.pos.y;
         this.rotation = data.angle;
         setState(false);
     }
