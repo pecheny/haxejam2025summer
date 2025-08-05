@@ -17,6 +17,7 @@ class RootsManagingRun extends GameRunBase {
     public function new(ctx, v:RootsManagingView) {
         this.view = v;
         super(ctx, v.ph);
+        entity.addChild(v.entity);
     }
 
     var views:Array<RootFragmentView> = [];
@@ -26,7 +27,7 @@ class RootsManagingRun extends GameRunBase {
         super.init();
         spr = new Sprite();
         #if (!display)
-        spr.graphics.beginFill(0x341401);
+        spr.graphics.beginFill(0x341401, 0.1);
         spr.graphics.drawRect(0, 0, 100, 100);
         spr.graphics.endFill();
         #end

@@ -12,6 +12,7 @@ class GroundsState implements Serializable implements State {
         frags = [];
     }
 }
+
 @:keep
 class RootFragment implements Serializable {
     public function new() {}
@@ -21,11 +22,26 @@ class RootFragment implements Serializable {
 }
 
 @:keep
-class Vec2 implements Serializable{
+class Vec2 implements Serializable {
     @:serialize public var x:Float = 0;
     @:serialize public var y:Float = 0;
 
     public function new() {}
+}
+
+class Grid {
+    public var width:Int;
+    public var height:Int;
+
+    public function new() {}
+    public function coordsToIndex(x, y) {
+        // var ix = children.length % refRow.length;
+        // var iy = Math.floor(children.length / refRow.length);
+        return y * height + x;
+    }
+    public function numCells() {
+        return width * height;
+    }
 }
 
 // @:forward
