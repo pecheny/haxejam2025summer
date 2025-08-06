@@ -1,5 +1,6 @@
 package hj25s;
 
+import a2d.Boundbox;
 import Axis2D;
 import bootstrap.Lifecycle.State;
 import fu.Serializable;
@@ -26,21 +27,116 @@ class Vec2 implements Serializable {
     @:serialize public var x:Float = 0;
     @:serialize public var y:Float = 0;
 
-    public function new() {}
+    public function new(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
+    }
+    public function toString() {
+        return '[$x, $y]';
+    
+    }
 }
 
-class Grid {
-    public var width:Int;
-    public var height:Int;
+typedef CellId = Array<Int>;
 
-    public function new() {}
-    public function coordsToIndex(x, y) {
+class Grid {
+    public var cellsXCount:Int;
+    public var cellsYCount:Int;
+
+    public var width:Float;
+    public var height:Float;
+
+    public function new(width:Float, height:Float, cellsXCount:Int, cellsYCount:Int) {
+        this.width = width;
+        this.height = height;
+        this.cellsXCount = cellsXCount;
+        this.cellsYCount = cellsYCount;
+    }
+
+    public function coordsToIndex(x:Int, y:Int) {
         // var ix = children.length % refRow.length;
         // var iy = Math.floor(children.length / refRow.length);
-        return y * height + x;
+        return y * cellsYCount + x;
     }
+
+    // public function canvasToGrid() {}
+
     public function numCells() {
-        return width * height;
+        return cellsXCount * cellsYCount;
+    }
+
+    public function getIntersectingCells(begin:Vec2, end:Vec2):Array<Int> {
+        var cellWidth = width / cellsXCount;
+        var cellHeight = height / cellsYCount;
+
+        // Function to clamp cell indexes
+        var clampX:Int->Int = x -> Std.int(Math.min(cellsXCount - 1, Math.max(0, x)));
+        var clampY:Int->Int = y -> Std.int(Math.min(cellsYCount - 1, Math.max(0, y)));
+
+        // Convert point to cell coordinate
+        function pointToCell(p:Vec2):CellId {
+            return [clampX(Math.floor(p.x / cellWidth)), clampY(Math.floor(p.y / cellHeight))];
+        }
+
+        var startCell = pointToCell(begin);
+        var endCell = pointToCell(end);
+
+        var result:Array<Int> = [];
+
+              // Setup for DDA grid traversal
+        var x0 = begin.x / cellWidth;
+        var y0 = begin.y / cellHeight;
+        var x1 = end.x / cellWidth;
+        var y1 = end.y / cellHeight;
+
+        var cellX = Std.int(Math.floor(x0));
+        var cellY = Std.int(Math.floor(y0));
+        var endCellX = Std.int(Math.floor(x1));
+        var endCellY = Std.int(Math.floor(y1));
+
+        var stepX = 0;
+        var stepY = 0;
+        var tMaxX:Float;
+        var tMaxY:Float;
+        var tDeltaX:Float;
+        var tDeltaY:Float;
+
+        var dx = x1 - x0;
+        var dy = y1 - y0;
+
+        stepX = (dx > 0) ? 1 : ((dx < 0) ? -1 : 0);
+        stepY = (dy > 0) ? 1 : ((dy < 0) ? -1 : 0);
+
+        tMaxX = (stepX > 0) ? ((cellX + 1) - x0) / dx : ((x0 - cellX) / -dx);
+
+        tMaxY = (stepY > 0) ? ((cellY + 1) - y0) / dy : ((y0 - cellY) / -dy);
+
+        // If dx or dy == 0, fix infinite values to large number
+        tMaxX = (dx == 0) ? 1e30 : tMaxX;
+        tMaxY = (dy == 0) ? 1e30 : tMaxY;
+
+        tDeltaX = (dx == 0) ? 1e30 : 1 / Math.abs(dx);
+        tDeltaY = (dy == 0) ? 1e30 : 1 / Math.abs(dy);
+
+        // Collect first cell (begin cell)
+        if (cellX >= 0 && cellX < cellsXCount && cellY >= 0 && cellY < cellsYCount)
+            result.push(coordsToIndex(cellX, cellY));
+
+        // Traverse the grid until we reach the end cell
+        while (cellX != endCellX || cellY != endCellY) {
+            if (tMaxX < tMaxY) {
+                tMaxX += tDeltaX;
+                cellX += stepX;
+            } else {
+                tMaxY += tDeltaY;
+                cellY += stepY;
+            }
+
+            if (cellX >= 0 && cellX < cellsXCount && cellY >= 0 && cellY < cellsYCount)
+                result.push(coordsToIndex(cellX, cellY));
+        }
+
+        return result;
     }
 }
 

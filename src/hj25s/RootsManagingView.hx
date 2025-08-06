@@ -42,13 +42,12 @@ class GroundsView extends Widget {
         for (a in Axis2D)
             ph.axisStates[a].addSibling(ak.getApplier(a));
         var axisFac = new Axis2DStateFactory(horizontal, stage);
-        var wdc = new TableWidgetContainer(gph, horizontal, [for (i in 0...grid.width) axisFac.create()], axisFac.create);
+        var wdc = new TableWidgetContainer(gph, horizontal, [for (i in 0...grid.cellsXCount) axisFac.create()], axisFac.create);
         for (i in 0...grid.numCells()) {            
             var cell = new CellView(Builder.widget());
             cells.push(cell);
             Builder.addWidget(wdc, cell.ph);
         }
-        hlCells([2, 10]);
         entity.addChild(gph.entity);
     }
     

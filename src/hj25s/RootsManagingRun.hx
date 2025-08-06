@@ -11,6 +11,7 @@ import bootstrap.GameRunBase;
 class RootsManagingRun extends GameRunBase {
     @:once var fui:FuiBuilder;
     @:once var state:GroundsState;
+    @:once var grid:Grid;
     var view:RootsManagingView;
     var spr:Sprite;
 
@@ -54,8 +55,6 @@ class RootsManagingRun extends GameRunBase {
         }
         views.resize(0);
     }
-    
-    
 
     function addView(data) {
         // var data = new RootFragment();
@@ -82,6 +81,10 @@ class RootsManagingRun extends GameRunBase {
     function select(idx) {
         for (i in 0...views.length)
             views[i].setState(idx == i);
+        var view = views[idx];
+        var data = state.frags[idx];
+        var cells = grid.getIntersectingCells(data.pos, view.getTip());
+        this.view.grounds.hlCells(cells);
     }
 }
 
@@ -97,15 +100,23 @@ class RootFragmentView extends Sprite {
     public function setState(selected:Bool) {
         #if (!display)
         graphics.clear();
-        graphics.lineStyle(4, selected ? 0xffffff : 0x00a070);
+        var scale = openfl.display.LineScaleMode.NONE;
+        var caps = openfl.display.CapsStyle.NONE;
+        var joints = openfl.display.JointStyle.BEVEL;
+
+        graphics.lineStyle(1, selected ? 0xffffff : 0x00a070, 1, false, scale, caps, joints);
         graphics.moveTo(0, 0);
         graphics.lineTo(0, 25);
         #end
     }
 
     var point = new Point(0, 25);
+    var vec = new Vec2();
 
     public function getTip() {
-        return localToGlobal(point);
+        var res = parent.globalToLocal(localToGlobal(point));
+        vec.x = res.x;
+        vec.y = res.y;
+        return vec;
     }
 }
