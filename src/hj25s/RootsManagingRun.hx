@@ -24,12 +24,11 @@ class RootsManagingRun extends GameRunBase {
     var views:Array<RootFragmentView> = [];
 
     override function init() {
-        trace("init");
         super.init();
         spr = new Sprite();
         #if (!display)
         spr.graphics.beginFill(0x341401, 0.1);
-        spr.graphics.drawRect(0, 0, 100, 100);
+        spr.graphics.drawRect(0, 0, grid.width, grid.height);
         spr.graphics.endFill();
         #end
         spr.addEventListener(MouseEvent.CLICK, onClick);
@@ -46,6 +45,8 @@ class RootsManagingRun extends GameRunBase {
         for (data in state.frags) {
             addView(data);
         }
+        createGrounds();
+        view.grounds.initData(state.cells);
     }
 
     override function reset() {
@@ -77,6 +78,16 @@ class RootsManagingRun extends GameRunBase {
         var idx = Std.parseInt(target.name.split("-")[1]);
         select(idx);
     }
+    
+    public function createGrounds() {
+        state.cells.resize(0);
+        for (i in 0...grid.numCells()) {
+            var cell = new GroundCell();
+            cell.production.wtr.max = Std.int(Math.random() * 5);
+            cell.production.wtr.value = cell.production.wtr.max ;
+            state.cells.push(cell);
+        }
+    }
 
     function select(idx) {
         for (i in 0...views.length)
@@ -89,11 +100,14 @@ class RootsManagingRun extends GameRunBase {
 }
 
 class RootFragmentView extends Sprite {
+    var data:RootFragment;
     public function new(data:RootFragment) {
         super();
         this.x = data.pos.x;
         this.y = data.pos.y;
         this.rotation = data.angle;
+        this.data = data;
+        point.y = data.len;
         setState(false);
     }
 
@@ -106,7 +120,7 @@ class RootFragmentView extends Sprite {
 
         graphics.lineStyle(1, selected ? 0xffffff : 0x00a070, 1, false, scale, caps, joints);
         graphics.moveTo(0, 0);
-        graphics.lineTo(0, 25);
+        graphics.lineTo(0, data.len);
         #end
     }
 

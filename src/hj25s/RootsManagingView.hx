@@ -1,5 +1,6 @@
 package hj25s;
 
+import hj25s.GroundsState.GroundCell;
 import hj25s.GroundsState.Grid;
 import gl.sets.ColorSet;
 import graphics.ShapesColorAssigner;
@@ -59,17 +60,30 @@ class GroundsView extends Widget {
             this.cells[i].setHl(true);
         }
     }
+    
+    public function initData(data:Array<GroundCell>) {
+        for (i in 0...data.length) {
+            cells[i].initData(data[i]);
+        }
+    }
+
 }
 
 class CellView extends BaseDkit {
     @:once var colors:ShapesColorAssigner<ColorSet>;
     static var SRC = <cell-view >
             ${fui.quad(__this__.ph,Std.int(Math.random() * 0x26ff0000))}
+            <label(b().b()) id="lbl" />
     </cell-view>
     
     override function init() {
         super.init();
         colors.setColor(0xff);
+    }
+    
+    public function initData(data:GroundCell) {
+        lbl.text = "" + data.production.wtr.value;
+    
     }
     
     public function setHl(val:Bool) {

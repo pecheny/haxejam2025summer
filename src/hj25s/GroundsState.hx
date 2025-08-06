@@ -1,5 +1,7 @@
 package hj25s;
 
+import stset.Stats;
+import fu.Signal;
 import a2d.Boundbox;
 import Axis2D;
 import bootstrap.Lifecycle.State;
@@ -8,6 +10,7 @@ import fu.Serializable;
 @:keep
 class GroundsState implements Serializable implements State {
     @:serialize(itemCtr = new RootFragment()) public var frags:Array<RootFragment> = [];
+    @:serialize(itemCtr = new GroundCell()) public var cells:Array<GroundCell> = [];
 
     public function new() {
         frags = [];
@@ -20,6 +23,26 @@ class RootFragment implements Serializable {
 
     @:serialize public var pos:Vec2 = new Vec2();
     @:serialize public var angle:Float = 0;
+    @:serialize public var len:Float = 15;
+
+    public var onChange:Signal<Void->Void> = new Signal();
+}
+
+@:keep
+class Resources implements fu.Serializable implements StatsSet {
+    public var wtr(default, null):CapGameStat<Int>;
+
+    public function dump() {
+        for (k in this.keys) {
+            Reflect.setField(data, k, this.get(k).getData());
+        }
+    }
+}
+
+class GroundCell implements Serializable {
+    @:serialize public var production(default, null):Resources = new Resources({});
+
+    public function new() {}
 }
 
 @:keep
@@ -31,9 +54,9 @@ class Vec2 implements Serializable {
         this.x = x;
         this.y = y;
     }
+
     public function toString() {
         return '[$x, $y]';
-    
     }
 }
 
@@ -83,7 +106,7 @@ class Grid {
 
         var result:Array<Int> = [];
 
-              // Setup for DDA grid traversal
+        // Setup for DDA grid traversal
         var x0 = begin.x / cellWidth;
         var y0 = begin.y / cellHeight;
         var x1 = end.x / cellWidth;
