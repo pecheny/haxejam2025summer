@@ -2,135 +2,58 @@ package hj25s;
 
 import haxe.Json;
 import hj25s.GroundsState;
-import openfl.events.MouseEvent;
-import openfl.geom.Point;
-import backends.openfl.SpriteAspectKeeper;
-import openfl.display.Sprite;
 import bootstrap.GameRunBase;
 
 class RootsManagingRun extends GameRunBase {
     @:once var fui:FuiBuilder;
     @:once var state:GroundsState;
     @:once var grid:Grid;
-    var view:RootsManagingView;
-    var spr:Sprite;
+    @:once var view:RootsManagingView;
 
-    public function new(ctx, v:RootsManagingView) {
-        this.view = v;
-        super(ctx, v.ph);
+    public function new(ctx, v) {
+        super(ctx, v);
         entity.addChild(v.entity);
     }
 
-    var views:Array<RootFragmentView> = [];
-
     override function init() {
         super.init();
-        spr = new Sprite();
-        #if (!display)
-        spr.graphics.beginFill(0x341401, 0.1);
-        spr.graphics.drawRect(0, 0, grid.width, grid.height);
-        spr.graphics.endFill();
-        #end
-        spr.addEventListener(MouseEvent.CLICK, onClick);
-        new SpriteAspectKeeper(view.canvas.ph, spr);
         // for (i in 0...5)
         //     addView();
         // trace(state);
         // var dump = state.dump();
         // sys.io.File.saveContent("state.json", Json.stringify(dump, null, " "));
+        view.roots.rootClick.listen(select);
+    }
+    
+    public function select(idx) {
+        view.roots.select(idx);
+        var view = view.roots.views[idx];
+        var data = state.frags[idx];
+        var cells = grid.getIntersectingCells(data.pos, view.getTip());
+        this.view.grounds.hlCells(cells);
     }
 
     override function startGame() {
         super.startGame();
-        for (data in state.frags) {
-            addView(data);
-        }
         createGrounds();
+
+        view.roots.initData(state.frags);
         view.grounds.initData(state.cells);
     }
 
     override function reset() {
         super.reset();
-        while (spr.numChildren > 0) {
-            spr.removeChildAt(0);
-        }
-        views.resize(0);
     }
 
-    function addView(data) {
-        // var data = new RootFragment();
-        // if (views.length > 0) {
-        //     var last = views[views.length - 1];
-        //     var tip = last.getTip();
-        //     data.pos.x = tip.x;
-        //     data.pos.y = tip.y;
-        //     data.angle = last.rotation + 5;
-        //     state.frags.push(data);
-        // }
-        var view = new RootFragmentView(data);
-        view.name = "frag-" + (views.length);
-        spr.addChild(view);
-        views.push(view);
-    }
 
-    function onClick(e:MouseEvent) {
-        var target:Sprite = cast e.target;
-        var idx = Std.parseInt(target.name.split("-")[1]);
-        select(idx);
-    }
-    
     public function createGrounds() {
         state.cells.resize(0);
         for (i in 0...grid.numCells()) {
             var cell = new GroundCell();
             cell.production.wtr.max = Std.int(Math.random() * 5);
-            cell.production.wtr.value = cell.production.wtr.max ;
+            cell.production.wtr.value = cell.production.wtr.max;
             state.cells.push(cell);
         }
     }
 
-    function select(idx) {
-        for (i in 0...views.length)
-            views[i].setState(idx == i);
-        var view = views[idx];
-        var data = state.frags[idx];
-        var cells = grid.getIntersectingCells(data.pos, view.getTip());
-        this.view.grounds.hlCells(cells);
-    }
-}
-
-class RootFragmentView extends Sprite {
-    var data:RootFragment;
-    public function new(data:RootFragment) {
-        super();
-        this.x = data.pos.x;
-        this.y = data.pos.y;
-        this.rotation = data.angle;
-        this.data = data;
-        point.y = data.len;
-        setState(false);
-    }
-
-    public function setState(selected:Bool) {
-        #if (!display)
-        graphics.clear();
-        var scale = openfl.display.LineScaleMode.NONE;
-        var caps = openfl.display.CapsStyle.NONE;
-        var joints = openfl.display.JointStyle.BEVEL;
-
-        graphics.lineStyle(1, selected ? 0xffffff : 0x00a070, 1, false, scale, caps, joints);
-        graphics.moveTo(0, 0);
-        graphics.lineTo(0, data.len);
-        #end
-    }
-
-    var point = new Point(0, 25);
-    var vec = new Vec2();
-
-    public function getTip() {
-        var res = parent.globalToLocal(localToGlobal(point));
-        vec.x = res.x;
-        vec.y = res.y;
-        return vec;
-    }
 }

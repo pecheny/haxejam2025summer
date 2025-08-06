@@ -12,9 +12,11 @@ import bootstrap.BootstrapMain;
 class Hxjam2025s extends BootstrapMain {
     public function new() {
         super();
-        var run = new RootsManagingRun(new Entity("roots run"), new RootsManagingView(Builder.widget()));
+        var view = new RootsManagingView(Builder.widget());
+        var run = new RootsManagingRun(new Entity("roots run"), view.ph);
         var grid = new Grid(100,100,10,10);
         run.entity.addComponent(grid);
+        run.entity.addComponent(view);
         var state = run.entity.addComponent(new GroundsState());
         state.load(Json.parse(Assets.getText("state.json")));
         runSwitcher.switchTo(run);
