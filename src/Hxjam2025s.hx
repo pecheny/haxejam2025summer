@@ -1,5 +1,6 @@
 package;
 
+import hj25s.RootsGame;
 import haxe.Json;
 import openfl.Assets;
 import hj25s.GroundsState;
@@ -13,7 +14,7 @@ class Hxjam2025s extends BootstrapMain {
     public function new() {
         super();
         var view = new RootsManagingView(Builder.widget());
-        var run = new RootsManagingRun(new Entity("roots run"), view.ph);
+        var run = new RootsGame(new Entity("roots game"), view.ph);
         var grid = new Grid(100,100,10,10);
         run.entity.addComponent(grid);
         run.entity.addComponent(view);

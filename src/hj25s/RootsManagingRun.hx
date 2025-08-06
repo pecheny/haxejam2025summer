@@ -5,8 +5,7 @@ import hj25s.GroundsState;
 import bootstrap.GameRunBase;
 
 class RootsManagingRun extends GameRunBase {
-    @:once var fui:FuiBuilder;
-    @:once var state:GroundsState;
+@:once var state:GroundsState;
     @:once var grid:Grid;
     @:once var view:RootsManagingView;
 
@@ -33,27 +32,5 @@ class RootsManagingRun extends GameRunBase {
         this.view.grounds.hlCells(cells);
     }
 
-    override function startGame() {
-        super.startGame();
-        createGrounds();
-
-        view.roots.initData(state.frags);
-        view.grounds.initData(state.cells);
-    }
-
-    override function reset() {
-        super.reset();
-    }
-
-
-    public function createGrounds() {
-        state.cells.resize(0);
-        for (i in 0...grid.numCells()) {
-            var cell = new GroundCell();
-            cell.production.wtr.max = Std.int(Math.random() * 5);
-            cell.production.wtr.value = cell.production.wtr.max;
-            state.cells.push(cell);
-        }
-    }
 
 }
