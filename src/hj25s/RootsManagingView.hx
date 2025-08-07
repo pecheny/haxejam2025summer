@@ -1,5 +1,10 @@
 package hj25s;
 
+import stset.Stats;
+import ec.DebugInit;
+import dkit.Dkit;
+import fu.PropStorage;
+import fancy.widgets.StatsDisplay;
 import a2d.Boundbox;
 import a2d.PlaceholderBuilder2D;
 import a2d.Stage;
@@ -36,6 +41,7 @@ class GroundsView extends Widget {
     @:once var stage:Stage;
     @:once var grid:Grid;
 
+    var props:PropStorage<Dynamic>;
     var cells:Array<CellView> = [];
 
     public function new(ph) {
@@ -44,6 +50,9 @@ class GroundsView extends Widget {
 
     override function init() {
         super.init();
+        props = entity.getOrCreate(PropStorage, () -> new CascadeProps<String>(null, "ground-props"));
+        props.set(Dkit.TEXT_STYLE, DS.micro_text);
+
         var gph = Builder.widget();
         var bb = new Boundbox();
         var ak = new AspectKeeper(cast gph.axisStates, bb);
@@ -57,6 +66,8 @@ class GroundsView extends Widget {
             Builder.addWidget(wdc, cell.ph);
         }
         entity.addChild(gph.entity);
+        if (data != null)
+            initData(data);
     }
 
     public function hlCells(cells:Array<Int>) {
@@ -68,7 +79,12 @@ class GroundsView extends Widget {
         }
     }
 
+    var data:Array<GroundCell>;
+
     public function initData(data:Array<GroundCell>) {
+        this.data = data;
+        if (!_inited)
+            return;
         for (i in 0...data.length) {
             cells[i].initData(data[i]);
         }
@@ -78,6 +94,7 @@ class GroundsView extends Widget {
 class RootsView extends Widget {
     @:once var grid:Grid;
     var spr:Sprite = new Sprite();
+
     public var views:Array<RootFragmentView> = [];
 
     public var rootClick:Signal<Int->Void> = new Signal();
@@ -130,7 +147,7 @@ class RootsView extends Widget {
         rootClick.dispatch(idx);
         // select(idx);
     }
-    
+
     public function select(idx) {
         for (i in 0...views.length)
             views[i].setState(idx == i);
@@ -139,7 +156,6 @@ class RootsView extends Widget {
         // var cells = grid.getIntersectingCells(data.pos, view.getTip());
         // this.view.grounds.hlCells(cells);
     }
-
 }
 
 class RootFragmentView extends Sprite {
@@ -184,16 +200,23 @@ class CellView extends BaseDkit {
 
     static var SRC = <cell-view >
             ${fui.quad(__this__.ph,Std.int(Math.random() * 0x26ff0000))}
-            <label(b().b()) id="lbl" />
+            // <label(b().b()) id="lbl" />
     </cell-view>
+
+    var sd:StatsDisplay;
 
     override function init() {
         super.init();
         colors.setColor(0xff);
+        sd=new StatsDisplay(ph);
     }
 
     public function initData(data:GroundCell) {
-        lbl.text = "" + data.production.wtr.value;
+        // lbl.text = "" + data.production.wtr.value;
+        entity.addComponentByType(StatsSet, data.production);
+        DebugInit.initCheck.listen((_) -> {
+            trace(sd);
+        });
     }
 
     public function setHl(val:Bool) {

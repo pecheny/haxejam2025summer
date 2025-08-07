@@ -30,6 +30,7 @@ class RootsManagingRun extends GameRunBase {
         var data = state.frags[idx];
         var cells = grid.getIntersectingCells(data.pos, view.getTip());
         this.view.grounds.hlCells(cells);
+        gameOvered.dispatch();
     }
 
 

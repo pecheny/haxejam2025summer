@@ -1,5 +1,6 @@
 package hj25s;
 
+import al.ec.WidgetSwitcher;
 import ec.Entity;
 import gameapi.GameRun;
 import bootstrap.GameRunBase;
@@ -9,12 +10,15 @@ class RootsGame extends GameRunBase {
     @:once var state:GroundsState;
     @:once var grid:Grid;
     @:once var view:RootsManagingView;
+    @:once var fui:FuiBuilder;
+    @:once var switcher:WidgetSwitcher<Axis2D>;
     
     var loop:GameRun;
     
     override function init() {
         super.init();
-        loop = new RootsManagingRun(new Entity("roots run"), getView());
+        createStyles();
+        loop = new TurnLoop(new Entity("roots run"), getView(), switcher);
         entity.addChild(loop.entity);
     }
 
@@ -38,5 +42,23 @@ class RootsGame extends GameRunBase {
             cell.production.wtr.value = cell.production.wtr.max;
             state.cells.push(cell);
         }
+    }
+    
+    
+    function createStyles() {
+        var pcStyle = fui.textStyles.newStyle("") 
+            .withSize(sfr, .07) 
+            .withAlign(vertical, Center)
+            .withAlign(horizontal, Center)
+            .build();
+        w.entity.addComponent(pcStyle);
+        fui.textStyles.newStyle(DS.small_text).withAlign(horizontal, Center).build();
+        fui.textStyles.newStyle(DS.small_text_right).withAlign(horizontal, Backward).build();
+        fui.textStyles.newStyle(DS.micro_text)
+            .withAlign(horizontal, Center)
+            .withAlign(vertical, Forward)
+            .withSize(sfr, .05)
+            .build();
+        fui.textStyles.newStyle(DS.heading).withSize(sfr, .14).build();
     }
 }

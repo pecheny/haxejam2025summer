@@ -15,9 +15,10 @@ class Hxjam2025s extends BootstrapMain {
         super();
         var view = new RootsManagingView(Builder.widget());
         var run = new RootsGame(new Entity("roots game"), view.ph);
-        var grid = new Grid(100,100,10,10);
+        var grid = new Grid(100, 100, 10, 10);
         run.entity.addComponent(grid);
         run.entity.addComponent(view);
+        run.entity.addChild(view.entity);
         var state = run.entity.addComponent(new GroundsState());
         state.load(Json.parse(Assets.getText("state.json")));
         runSwitcher.switchTo(run);

@@ -30,7 +30,7 @@ class RootFragment implements Serializable {
 
 @:keep
 class Resources implements fu.Serializable implements StatsSet {
-    public var wtr(default, null):CapGameStat<Int>;
+    public var wtr(default, null):CapGameStat<Float>;
 
     public function dump() {
         for (k in this.keys) {

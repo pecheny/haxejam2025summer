@@ -13,7 +13,6 @@
     <window antialiasing="4"/>
     <window background="#252525" fps="120" width="900" height="700" unless="html5"/>
     <window background="#252525" fps="60" if="html5"/>
-    <source path="src"/>
 
     <haxelib name="openfl"/>
     <!-- <haxelib name="tracer"/> -->
@@ -32,6 +31,7 @@
     <haxelib name="uikit-flat"/>
 
 
+    <source path="src"/>
     <!-- <haxelib name="hxmath"/> -->
 
     <haxeflag name="-D" value="dump=pretty" />
