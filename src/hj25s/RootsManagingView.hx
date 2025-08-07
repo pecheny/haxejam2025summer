@@ -163,11 +163,7 @@ class RootFragmentView extends Sprite {
 
     public function new(data:RootFragment) {
         super();
-        this.x = data.pos.x;
-        this.y = data.pos.y;
-        this.rotation = data.angle;
         this.data = data;
-        point.y = data.len;
         setState(false);
     }
 
@@ -179,19 +175,9 @@ class RootFragmentView extends Sprite {
         var joints = openfl.display.JointStyle.BEVEL;
 
         graphics.lineStyle(1, selected ? 0xffffff : 0x00a070, 1, false, scale, caps, joints);
-        graphics.moveTo(0, 0);
-        graphics.lineTo(0, data.len);
+        graphics.moveTo(data.pos.x, data.pos.y);
+        graphics.lineTo(data.end.x, data.end.y);
         #end
-    }
-
-    var point = new Point(0, 25);
-    var vec = new Vec2(0, 0);
-
-    public function getTip() {
-        var res = parent.globalToLocal(localToGlobal(point));
-        vec.x = res.x;
-        vec.y = res.y;
-        return vec;
     }
 }
 

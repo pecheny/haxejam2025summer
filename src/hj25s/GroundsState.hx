@@ -23,6 +23,7 @@ class RootFragment implements Serializable {
     public function new() {}
 
     @:serialize public var pos:Vec2 = new Vec2(0, 0);
+    @:serialize public var end:Vec2 = new Vec2(0, 0);
     @:serialize public var angle:Float = 0;
     @:serialize public var len:Float = 15;
 
