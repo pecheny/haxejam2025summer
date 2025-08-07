@@ -29,10 +29,9 @@
     <haxelib name="jiga"/>
     <haxelib name="tweenx"/>
     <haxelib name="uikit-flat"/>
-
+    <haxelib name="hxmath"/>
 
     <source path="src"/>
-    <!-- <haxelib name="hxmath"/> -->
 
     <haxeflag name="-D" value="dump=pretty" />
     <haxedef name="openfl_disable_context_cache" value="true"/>

@@ -23,7 +23,6 @@ class StatsMacro {
         var statNames:Array<StatDesc> = [];
         var ctxExprs = null;
         for (f in fields) {
-            trace(f.name);
             switch f {
                 case {name: 'new', kind: FFun({expr: {expr: EBlock(ie)}})}:
                     ctxExprs = ie;

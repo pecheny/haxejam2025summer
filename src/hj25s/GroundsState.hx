@@ -1,5 +1,6 @@
 package hj25s;
 
+import hxmath.math.Vector2;
 import stset.Stats;
 import fu.Signal;
 import a2d.Boundbox;
@@ -21,7 +22,7 @@ class GroundsState implements Serializable implements State {
 class RootFragment implements Serializable {
     public function new() {}
 
-    @:serialize public var pos:Vec2 = new Vec2();
+    @:serialize public var pos:Vec2 = new Vec2(0, 0);
     @:serialize public var angle:Float = 0;
     @:serialize public var len:Float = 15;
 
@@ -45,12 +46,22 @@ class GroundCell implements Serializable {
     public function new() {}
 }
 
-@:keep
-class Vec2 implements Serializable {
+@:forward.new
+@:forward
+abstract Vec2(hxmath.math.Vector2) {
+    public inline function dump():Dynamic{
+        return cast(this, Vec2S).dump();
+    }
+    public inline function load(data:Dynamic):Void{
+        return cast(this, Vec2S).load(data);
+    }
+}
+
+@:keep class Vec2S implements Serializable {
     @:serialize public var x:Float = 0;
     @:serialize public var y:Float = 0;
 
-    public function new(x = 0, y = 0) {
+    public function new(x:Float, y:Float) {
         this.x = x;
         this.y = y;
     }
@@ -77,12 +88,8 @@ class Grid {
     }
 
     public function coordsToIndex(x:Int, y:Int) {
-        // var ix = children.length % refRow.length;
-        // var iy = Math.floor(children.length / refRow.length);
         return y * cellsYCount + x;
     }
-
-    // public function canvasToGrid() {}
 
     public function numCells() {
         return cellsXCount * cellsYCount;

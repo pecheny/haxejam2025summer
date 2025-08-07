@@ -185,7 +185,7 @@ class RootFragmentView extends Sprite {
     }
 
     var point = new Point(0, 25);
-    var vec = new Vec2();
+    var vec = new Vec2(0, 0);
 
     public function getTip() {
         var res = parent.globalToLocal(localToGlobal(point));
@@ -208,7 +208,7 @@ class CellView extends BaseDkit {
     override function init() {
         super.init();
         colors.setColor(0xff);
-        sd=new StatsDisplay(ph);
+        sd = new StatsDisplay(ph);
     }
 
     public function initData(data:GroundCell) {
