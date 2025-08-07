@@ -40,6 +40,8 @@ class RootsManagingView extends BaseDkit {
 class GroundsView extends Widget {
     @:once var stage:Stage;
     @:once var grid:Grid;
+    @:once var state:GroundsState;
+    @:once var selection:Selection;
 
     var props:PropStorage<Dynamic>;
     var cells:Array<CellView> = [];
@@ -66,11 +68,18 @@ class GroundsView extends Widget {
             Builder.addWidget(wdc, cell.ph);
         }
         entity.addChild(gph.entity);
+        selection.onChange.listen(hlSelection);
         if (data != null)
             initData(data);
     }
 
-    public function hlCells(cells:Array<Int>) {
+    function hlSelection() {
+        var data = state.frags[selection.value];
+        var cells = grid.getIntersectingCells(data.pos, data.end);
+        hlCells(cells);
+    }
+
+    function hlCells(cells:Array<Int>) {
         for (i in 0...grid.numCells()) {
             this.cells[i].setHl(false);
         }
@@ -93,10 +102,10 @@ class GroundsView extends Widget {
 
 class RootsView extends Widget {
     @:once var grid:Grid;
+    @:once var selection:Selection;
     var spr:Sprite = new Sprite();
 
     public var views:Array<RootFragmentView> = [];
-
     public var rootClick:Signal<Int->Void> = new Signal();
 
     override public function init() {
@@ -107,6 +116,7 @@ class RootsView extends Widget {
         #end
         spr.addEventListener(MouseEvent.CLICK, onClick);
         new SpriteAspectKeeper(ph, spr);
+        selection.onChange.listen(select);
     }
 
     public function initData(frags:Array<RootFragment>) {
@@ -116,15 +126,6 @@ class RootsView extends Widget {
     }
 
     function addView(data) {
-        // var data = new RootFragment();
-        // if (views.length > 0) {
-        //     var last = views[views.length - 1];
-        //     var tip = last.getTip();
-        //     data.pos.x = tip.x;
-        //     data.pos.y = tip.y;
-        //     data.angle = last.rotation + 5;
-        //     state.frags.push(data);
-        // }
         var view = new RootFragmentView(data);
         view.name = "frag-" + (views.length);
         spr.addChild(view);
@@ -148,13 +149,10 @@ class RootsView extends Widget {
         // select(idx);
     }
 
-    public function select(idx) {
+    public function select() {
+        var idx = selection.value;
         for (i in 0...views.length)
             views[i].setState(idx == i);
-        // var view = views[idx];
-        // var data = state.frags[idx];
-        // var cells = grid.getIntersectingCells(data.pos, view.getTip());
-        // this.view.grounds.hlCells(cells);
     }
 }
 

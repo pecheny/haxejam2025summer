@@ -10,6 +10,7 @@ class RootsManagingRun extends GameRunBase {
     @:once var grid:Grid;
     @:once var view:RootsManagingView;
     @:once var executor:Executor;
+    @:once var selection:Selection;
 
     public function new(ctx, v) {
         super(ctx, v);
@@ -27,13 +28,9 @@ class RootsManagingRun extends GameRunBase {
     }
     
     public function select(idx) {
-        view.roots.select(idx);
-        var view = view.roots.views[idx];
-        var data = state.frags[idx];
-        var cells = grid.getIntersectingCells(data.pos, data.end);
-        this.view.grounds.hlCells(cells);
-        executor.run("test()");
-        gameOvered.dispatch();
+        selection.value = idx;
+        // executor.run("test()");
+        // gameOvered.dispatch();
     }
 
 

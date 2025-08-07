@@ -1,5 +1,6 @@
 package;
 
+import hj25s.Selection;
 import bootstrap.Executor;
 import hj25s.Exec.ExecCtx;
 import hj25s.RootsGame;
@@ -24,6 +25,7 @@ class Hxjam2025s extends BootstrapMain {
         var state = rootEntity.addComponent(new GroundsState());
         var ctx = rootEntity.addComponent(new ExecCtx(rootEntity));
         rootEntity.addComponent(new Executor(ctx.vars, true));
+        Selection.getOrCreate(rootEntity);
 
         state.load(Json.parse(Assets.getText("state.json")));
         runSwitcher.switchTo(run);
