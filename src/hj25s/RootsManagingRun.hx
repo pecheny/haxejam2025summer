@@ -1,5 +1,6 @@
 package hj25s;
 
+import bootstrap.Executor;
 import haxe.Json;
 import hj25s.GroundsState;
 import bootstrap.GameRunBase;
@@ -8,6 +9,7 @@ class RootsManagingRun extends GameRunBase {
 @:once var state:GroundsState;
     @:once var grid:Grid;
     @:once var view:RootsManagingView;
+    @:once var executor:Executor;
 
     public function new(ctx, v) {
         super(ctx, v);
@@ -30,6 +32,7 @@ class RootsManagingRun extends GameRunBase {
         var data = state.frags[idx];
         var cells = grid.getIntersectingCells(data.pos, view.getTip());
         this.view.grounds.hlCells(cells);
+        executor.run("test()");
         gameOvered.dispatch();
     }
 

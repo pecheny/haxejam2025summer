@@ -1,5 +1,7 @@
 package;
 
+import bootstrap.Executor;
+import hj25s.Exec.ExecCtx;
 import hj25s.RootsGame;
 import haxe.Json;
 import openfl.Assets;
@@ -19,7 +21,10 @@ class Hxjam2025s extends BootstrapMain {
         run.entity.addComponent(grid);
         run.entity.addComponent(view);
         run.entity.addChild(view.entity);
-        var state = run.entity.addComponent(new GroundsState());
+        var state = rootEntity.addComponent(new GroundsState());
+        var ctx = rootEntity.addComponent(new ExecCtx(rootEntity));
+        rootEntity.addComponent(new Executor(ctx.vars, true));
+
         state.load(Json.parse(Assets.getText("state.json")));
         runSwitcher.switchTo(run);
         run.startGame();
