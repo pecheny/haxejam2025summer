@@ -102,6 +102,7 @@ class GroundsView extends Widget {
 
 class RootsView extends Widget {
     @:once var grid:Grid;
+    @:once var state:GroundsState;
     @:once var selection:Selection;
     var spr:Sprite = new Sprite();
 
@@ -117,6 +118,7 @@ class RootsView extends Widget {
         spr.addEventListener(MouseEvent.CLICK, onClick);
         new SpriteAspectKeeper(ph, spr);
         selection.onChange.listen(select);
+        state.fragCreated.listen(() -> addView(state.frags[state.frags.length-1]));
     }
 
     public function initData(frags:Array<RootFragment>) {
@@ -125,7 +127,7 @@ class RootsView extends Widget {
         }
     }
 
-    function addView(data) {
+    function addView(data:RootFragment) {
         var view = new RootFragmentView(data);
         view.name = "frag-" + (views.length);
         spr.addChild(view);

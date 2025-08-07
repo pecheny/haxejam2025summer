@@ -29,7 +29,7 @@ class RootsManagingRun extends GameRunBase {
     
     public function select(idx) {
         selection.value = idx;
-        // executor.run("test()");
+        executor.run("addFrag(10)");
         // gameOvered.dispatch();
     }
 

@@ -12,6 +12,7 @@ import fu.Serializable;
 class GroundsState implements Serializable implements State {
     @:serialize(itemCtr = new RootFragment()) public var frags:Array<RootFragment> = [];
     @:serialize(itemCtr = new GroundCell()) public var cells:Array<GroundCell> = [];
+    public var fragCreated:Signal<Void->Void> = new Signal();
 
     public function new() {
         frags = [];
@@ -22,12 +23,31 @@ class GroundsState implements Serializable implements State {
 class RootFragment implements Serializable {
     public function new() {}
 
-    @:serialize public var pos:Vec2 = new Vec2(0, 0);
-    @:serialize public var end:Vec2 = new Vec2(0, 0);
-    @:serialize public var angle:Float = 0;
-    @:serialize public var len:Float = 15;
+    @:serialize var _pos:Vec2 = new Vec2(0, 0);
+    @:serialize var _end:Vec2 = new Vec2(0, 0);
+
+    // public var pos:Vector2;
+    // public var end:Vector2;
+    public var pos(get, set):Vector2;
+    public var end(get, set):Vector2;
 
     public var onChange:Signal<Void->Void> = new Signal();
+
+    function set_pos(value:Vector2):Vector2 {
+        return _pos = value;
+    }
+
+    function get_pos():Vector2 {
+        return _pos;
+    }
+
+    function set_end(value:Vector2):Vector2 {
+        return _end = value;
+    }
+
+    function get_end():Vector2 {
+        return _end;
+    }
 }
 
 @:keep
@@ -47,18 +67,7 @@ class GroundCell implements Serializable {
     public function new() {}
 }
 
-@:forward.new
-@:forward
-abstract Vec2(hxmath.math.Vector2) {
-    public inline function dump():Dynamic{
-        return cast(this, Vec2S).dump();
-    }
-    public inline function load(data:Dynamic):Void{
-        return cast(this, Vec2S).load(data);
-    }
-}
-
-@:keep class Vec2S implements Serializable {
+@:keep class Vec2 implements Serializable {
     @:serialize public var x:Float = 0;
     @:serialize public var y:Float = 0;
 

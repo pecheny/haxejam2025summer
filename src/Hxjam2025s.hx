@@ -16,18 +16,17 @@ import bootstrap.BootstrapMain;
 class Hxjam2025s extends BootstrapMain {
     public function new() {
         super();
-        var view = new RootsManagingView(Builder.widget());
-        var run = new RootsGame(new Entity("roots game"), view.ph);
         var grid = new Grid(100, 100, 10, 10);
-        run.entity.addComponent(grid);
-        run.entity.addComponent(view);
-        run.entity.addChild(view.entity);
+        rootEntity.addComponent(grid);
+        Selection.getOrCreate(rootEntity);
         var state = rootEntity.addComponent(new GroundsState());
+        state.load(Json.parse(Assets.getText("state.json")));
         var ctx = rootEntity.addComponent(new ExecCtx(rootEntity));
         rootEntity.addComponent(new Executor(ctx.vars, true));
-        Selection.getOrCreate(rootEntity);
 
-        state.load(Json.parse(Assets.getText("state.json")));
+        var view = new RootsManagingView(Builder.widget());
+        rootEntity.addComponent(view);
+        var run = new RootsGame(new Entity("roots game"), view.ph);
         runSwitcher.switchTo(run);
         run.startGame();
     }
