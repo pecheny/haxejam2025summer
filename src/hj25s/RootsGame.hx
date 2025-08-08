@@ -17,7 +17,6 @@ class RootsGame extends GameRunBase {
     
     override function init() {
         super.init();
-        createStyles();
         loop = new TurnLoop(new Entity("roots run"), getView(), @:privateAccess view.switcher.switcher);
         entity.addChild(loop.entity);
     }
@@ -46,23 +45,5 @@ class RootsGame extends GameRunBase {
             cell.production.wtr.value = cell.production.wtr.max;
             state.cells.push(cell);
         }
-    }
-    
-    
-    function createStyles() {
-        var pcStyle = fui.textStyles.newStyle("") 
-            .withSize(sfr, .07) 
-            .withAlign(vertical, Center)
-            .withAlign(horizontal, Center)
-            .build();
-        w.entity.addComponent(pcStyle);
-        fui.textStyles.newStyle(DS.small_text).withAlign(horizontal, Center).build();
-        fui.textStyles.newStyle(DS.small_text_right).withAlign(horizontal, Backward).build();
-        fui.textStyles.newStyle(DS.micro_text)
-            .withAlign(horizontal, Center)
-            .withAlign(vertical, Forward)
-            .withSize(sfr, .05)
-            .build();
-        fui.textStyles.newStyle(DS.heading).withSize(sfr, .14).build();
     }
 }

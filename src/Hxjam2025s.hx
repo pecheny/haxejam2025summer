@@ -1,5 +1,7 @@
 package;
 
+import i18n.RootsI18n;
+import i18n.I18n;
 import stset.Stats.StatsSet;
 import hj25s.GameScreen;
 import hj25s.Selection;
@@ -20,6 +22,7 @@ class Hxjam2025s extends BootstrapMain {
         super();
         var grid = new Grid(100, 100, 10, 10);
         rootEntity.addComponent(grid);
+        rootEntity.addComponentByType(I18n, new RootsI18n());
         Selection.getOrCreate(rootEntity);
         var state = rootEntity.addComponent(new GroundsState());
         state.load(Json.parse(Assets.getText("state.json")));
