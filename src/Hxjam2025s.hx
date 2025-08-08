@@ -1,5 +1,6 @@
 package;
 
+import stset.Stats.StatsSet;
 import hj25s.GameScreen;
 import hj25s.Selection;
 import bootstrap.Executor;
