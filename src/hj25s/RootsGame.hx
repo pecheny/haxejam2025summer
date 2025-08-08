@@ -9,7 +9,7 @@ import hj25s.GroundsState;
 class RootsGame extends GameRunBase {
     @:once var state:GroundsState;
     @:once var grid:Grid;
-    @:once var view:RootsManagingView;
+    @:once var view:GameScreen;
     @:once var fui:FuiBuilder;
     @:once var switcher:WidgetSwitcher<Axis2D>;
     
@@ -18,16 +18,20 @@ class RootsGame extends GameRunBase {
     override function init() {
         super.init();
         createStyles();
-        loop = new TurnLoop(new Entity("roots run"), getView(), switcher);
+        loop = new TurnLoop(new Entity("roots run"), getView(), @:privateAccess view.switcher.switcher);
         entity.addChild(loop.entity);
     }
 
     override function startGame() {
         super.startGame();
         createGrounds();
-        view.roots.initData(state.frags);
-        view.grounds.initData(state.cells);
+        view.managing.roots.initData(state.frags);
+        view.managing.grounds.initData(state.cells);
         loop.startGame();
+    }
+    
+    override function reset() {
+        loop.reset();
     }
     
     override function update(dt:Float) {

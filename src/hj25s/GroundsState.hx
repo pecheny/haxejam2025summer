@@ -12,6 +12,7 @@ import fu.Serializable;
 class GroundsState implements Serializable implements State {
     @:serialize(itemCtr = new RootFragment()) public var frags:Array<RootFragment> = [];
     @:serialize(itemCtr = new GroundCell()) public var cells:Array<GroundCell> = [];
+    @:serialize public var resources:Resources = new Resources({});
     public var fragCreated:Signal<Void->Void> = new Signal();
 
     public function new() {

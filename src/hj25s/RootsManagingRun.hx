@@ -1,5 +1,8 @@
 package hj25s;
 
+import ec.Entity;
+import loops.market.MarketGui.MarketWidget;
+import loops.market.MarketActivity;
 import bootstrap.Executor;
 import haxe.Json;
 import hj25s.GroundsState;
@@ -11,10 +14,15 @@ class RootsManagingRun extends GameRunBase {
     @:once var view:RootsManagingView;
     @:once var executor:Executor;
     @:once var selection:Selection;
+    var market:MarketActivity;
 
     public function new(ctx, v) {
         super(ctx, v);
-        entity.addChild(v.entity);
+        var mgui = new MarketWidget(getView());
+        entity.addComponentByType(MarketGui, mgui);
+        mgui.onDone.listen(()->gameOvered.dispatch());
+        market = new MarketActivity(new Entity("market"), getView());
+        entity.addChild(market.entity);
     }
 
     override function init() {
@@ -27,10 +35,20 @@ class RootsManagingRun extends GameRunBase {
         view.roots.rootClick.listen(select);
     }
     
+    override function startGame() {
+        market.initDescr([{
+            "actions": ["addFrag(10)"],
+            "price": 10
+        }]);
+        market.startGame();
+    }
+    
+    override function reset() {
+        market.reset();
+    }
+    
     public function select(idx) {
         selection.value = idx;
-        executor.run("addFrag(10)");
-        // gameOvered.dispatch();
     }
 
 

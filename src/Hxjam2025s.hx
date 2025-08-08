@@ -1,5 +1,6 @@
 package;
 
+import hj25s.GameScreen;
 import hj25s.Selection;
 import bootstrap.Executor;
 import hj25s.Exec.ExecCtx;
@@ -21,13 +22,17 @@ class Hxjam2025s extends BootstrapMain {
         Selection.getOrCreate(rootEntity);
         var state = rootEntity.addComponent(new GroundsState());
         state.load(Json.parse(Assets.getText("state.json")));
+        rootEntity.addComponent(state.resources);
         var ctx = rootEntity.addComponent(new ExecCtx(rootEntity));
         rootEntity.addComponent(new Executor(ctx.vars, true));
 
-        var view = new RootsManagingView(Builder.widget());
+        var view = new GameScreen(Builder.widget());
+        fui.makeClickInput(view.ph);
         rootEntity.addComponent(view);
+        rootEntity.addComponent(view.managing);
         var run = new RootsGame(new Entity("roots game"), view.ph);
         runSwitcher.switchTo(run);
+        run.reset();
         run.startGame();
     }
 }
