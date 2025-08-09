@@ -12,10 +12,12 @@ class RootsI18n implements I18n {
 // ◌ ⦿ ⊖ ○ ↔∞
     var colors:Map<String, Int> = [
         "<wtr/>" => 0x7bbde1,
+        "<hlt/>" => 0xdb6a6a,
     ];
     
     var chrs:Map<String, String> = [
         "<wtr/>" => "E",
+        "<hlt/>" => "H",
     ];
 
 

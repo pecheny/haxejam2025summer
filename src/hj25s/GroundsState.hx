@@ -13,6 +13,7 @@ class GroundsState implements Serializable implements State {
     @:serialize(itemCtr = new RootFragment()) public var frags:Array<RootFragment> = [];
     @:serialize(itemCtr = new GroundCell()) public var cells:Array<GroundCell> = [];
     @:serialize public var resources:Resources = new Resources({});
+    @:serialize public var flower:FlowerStats = new FlowerStats({});
     public var fragCreated:Signal<Void->Void> = new Signal();
 
     public function new() {
@@ -48,6 +49,19 @@ class RootFragment implements Serializable {
 
     function get_end():Vector2 {
         return _end;
+    }
+}
+
+@:keep
+class FlowerStats implements fu.Serializable implements StatsSet {
+    public var hlt(default, null):CapGameStat<Int>;
+    public var exp(default, null):GameStat<Int>;
+    public var lvl(default, null):GameStat<Int>;
+
+    public function dump() {
+        for (k in this.keys) {
+            Reflect.setField(data, k, this.get(k).getData());
+        }
     }
 }
 

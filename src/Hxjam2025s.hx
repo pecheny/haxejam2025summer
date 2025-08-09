@@ -28,6 +28,7 @@ class Hxjam2025s extends BootstrapMain {
         var state = rootEntity.addComponent(new GroundsState());
         state.load(Json.parse(Assets.getText("state.json")));
         rootEntity.addComponent(state.resources);
+        rootEntity.addComponent(state.flower);
         var ctx = rootEntity.addComponent(new ExecCtx(rootEntity));
         rootEntity.addComponent(new Executor(ctx.vars, true));
 

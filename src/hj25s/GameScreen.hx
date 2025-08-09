@@ -1,5 +1,6 @@
 package hj25s;
 
+import hj25s.GroundsState.FlowerStats;
 import stset.Stats.StatsSet;
 import hj25s.GroundsState.Resources;
 import fancy.widgets.StatsDisplay;
@@ -8,6 +9,8 @@ import al.layouts.PortionLayout;
 
 class GameScreen extends BaseDkit {
     @:once var res:Resources;
+    @:once var flower:FlowerStats;
+
     public var managing:RootsManagingView;
 
     static var SRC = <game-screen hl={PortionLayout.instance}>
@@ -15,6 +18,10 @@ class GameScreen extends BaseDkit {
             <base(b().v(pfr, 0.1).b()) id="stats">
                 ${new StatsDisplay(__this__.ph)}
             </base>
+            <base(b().v(pfr, 0.1).b()) id="fstats">
+                ${new StatsDisplay(__this__.ph)}
+            </base>
+
             <switcher(b().v(pfr, 1).b())  public id="switcher"/>
         </base>
 
@@ -26,5 +33,6 @@ class GameScreen extends BaseDkit {
     override function init() {
         super.init();
         stats.entity.addComponentByType(StatsSet, res);
+        fstats.entity.addComponentByType(StatsSet, flower);
     }
 }
