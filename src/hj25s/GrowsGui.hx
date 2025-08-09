@@ -29,6 +29,7 @@ typedef GrowsGuiDesc = {
     ?damage:Float,
     spent:LevelSpendings,
 }
+
 class GrowthScreen extends BaseDkit {
     static var SRC = <growth-screen vl={PortionLayout.instance}>
         <label(b().v(sfr, .15).b()) text={"Day is over"} />
@@ -41,9 +42,9 @@ class GrowthScreen extends BaseDkit {
     function onOkClick() {
         onDone.dispatch();
     }
-    
+
     public function initData(desc:GrowsGuiDesc) {
-        if (desc.damage!=null && desc.damage > 0) {
+        if (desc.damage != null && desc.damage > 0) {
             lbl.text = 'Due to insufficient resource the flower loses ${desc.damage} hp';
         } else {
             lbl.text = 'All the flower needs fulfilled';
@@ -51,6 +52,18 @@ class GrowthScreen extends BaseDkit {
     }
 }
 
+class WinScreen extends BaseDkit {
+    static var SRC = <win-screen vl={PortionLayout.instance}>
+        <label(b().v(sfr, .15).b()) text={"You WON!"} />
+        <button(b().h(sfr, .36).v(sfr, .12).b()) id="okButton" text={ "Done" } onClick={onOkClick} style={"small-text-center"} />
+ </win-screen>
+
+    public var onDone:ec.Signal<Void->Void> = new ec.Signal();
+
+    function onOkClick() {
+        onDone.dispatch();
+    }
+}
 
 class LevelupGui2 extends BaseDkit implements OptionPickerGui<String> {
     public var onChoice(default, null) = new IntSignal();
@@ -79,5 +92,3 @@ class LevelupGui2 extends BaseDkit implements OptionPickerGui<String> {
         input.initData(captions);
     }
 }
-
-

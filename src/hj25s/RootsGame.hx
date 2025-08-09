@@ -18,6 +18,7 @@ class RootsGame extends GameRunBase {
     override function init() {
         super.init();
         loop = new TurnLoop(new Entity("roots run"), getView(), @:privateAccess view.switcher.switcher);
+        loop.gameOvered.listen(()->gameOvered.dispatch());
         entity.addChild(loop.entity);
     }
 

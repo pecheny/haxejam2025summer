@@ -1,5 +1,8 @@
 package;
 
+import al.ec.WidgetSwitcher;
+import bootstrap.Menu;
+import bootstrap.Lifecycle;
 import bootstrap.DefNode;
 import loops.llevelup.LevelupData;
 import loops.llevelup.LevelUpActivity.LevelingStats;
@@ -20,7 +23,7 @@ import ec.Entity;
 import hj25s.RootsManagingRun;
 import bootstrap.BootstrapMain;
 
-class Hxjam2025s extends BootstrapMain {
+class Hxjam2025s extends LifecycleImpl {
     public function new() {
         super();
         var grid = new Grid(100, 100, 10, 10);
@@ -30,7 +33,8 @@ class Hxjam2025s extends BootstrapMain {
         var sel = Selection.getOrCreate(rootEntity);
         sel.value = -1;
         var state = rootEntity.addComponent(new GroundsState());
-        state.load(Json.parse(Assets.getText("state.json")));
+        // state.load(Json.parse(Assets.getText("state.json")));
+        rootEntity.addComponentByType(State, state);
         rootEntity.addComponent(state.resources);
         rootEntity.addComponent(state.flower);
         rootEntity.addComponent(new LevelingStats(state.flower));
@@ -44,8 +48,12 @@ class Hxjam2025s extends BootstrapMain {
         rootEntity.addComponent(view.managing);
         var run = new RootsGame(new Entity("roots game"), view.ph);
         run.entity.addComponent(@:privateAccess view.switcher.switcher);
-        runSwitcher.switchTo(run);
-        run.reset();
-        run.startGame();
+        bindRun(run);
+        rootEntity.getComponent(WidgetSwitcher).switchTo(run.getView()); // preinit
+        new Menu(menu);
+        showMenu();
+        // runSwitcher.switchTo(run);
+        // run.reset();
+        // run.startGame();
     }
 }

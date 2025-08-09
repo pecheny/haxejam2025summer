@@ -15,5 +15,8 @@ class TurnLoop extends SequenceRun {
         addActivity(new RootsManagingRun(new Entity("managing"), Builder.widget()));
         addActivity(new SimulationRun(new Entity("simulation"), Builder.widget()));
         addActivity(new GrowsRun(new Entity("grows"), Builder.widget()));
+        addChecker(()->state.flower.lvl.value > 1);
+        addChecker(()->state.flower.hlt.value <= 0);
+
     }
 }

@@ -20,17 +20,28 @@ class GrowsRun extends GameRunBase {
     var gui:GrowthScreen;
     var spendings:Array<LevelSpendings> = [["wtr" => 5], ["wtr" => 10], ["wtr" => 20],];
     var lvlup:LevelUpActivity;
+    var winScreen:WinScreen;
 
     override function init() {
         super.init();
         gui = new GrowthScreen(getView());
-        gui.onDone.listen( onEnd);
+        gui.onDone.listen(onEnd);
         var lvgui = new LevelupGui2(Builder.widget());
         // lvgui.entity.addComponent(fui.textStyles.getStyle(DS.small_text));
         lvlup = new LevelUpActivity(new Entity("lvlup"), lvgui.ph);
         entity.addChild(lvlup.entity);
         lvlup.entity.addComponentByType(OptionPickerGui, lvgui);
-        lvlup.gameOvered.listen(() -> gameOvered.dispatch());
+        lvlup.gameOvered.listen(onLvlup);
+        winScreen = new WinScreen(Builder.widget());
+        winScreen.onDone.listen(() -> gameOvered.dispatch());
+    }
+
+    function onLvlup() {
+        if (flower.lvl.value >= spendings.length - 1) {
+            switcher.switchTo(winScreen.ph);
+        } else {
+            gameOvered.dispatch();
+        }
     }
 
     function onEnd() {
