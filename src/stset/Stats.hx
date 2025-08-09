@@ -20,13 +20,13 @@ interface Serializable {
 
 class GameStat<T:Float> implements StatRO<Float> implements Serializable {
     public var onChange(default, null):Signal<Float->Void> = new Signal();
-    @:isVar public var value(get, set):Float;
+    @:isVar public var value(get, set):T;
 
-    function get_value():Float {
+    function get_value():T {
         return value;
     }
 
-    function set_value(newVal:Float):Float {
+    function set_value(newVal:T):T {
         var delta = newVal - value;
         value = newVal;
         onChange.dispatch(delta);
@@ -45,7 +45,7 @@ class GameStat<T:Float> implements StatRO<Float> implements Serializable {
         return value;
 }
 
-class ZeroCapGameStat<T:Float> extends CapGameStat<Float> {
+class ZeroCapGameStat<T:Float> extends CapGameStat<T> {
     override function load(d:Dynamic) {
         if (d is Float) {
             max = d;
@@ -57,21 +57,21 @@ class ZeroCapGameStat<T:Float> extends CapGameStat<Float> {
     }
 }
 
-class CapGameStat<T:Float> extends GameStat<Float> {
-    public var max(default, set):Float;
+class CapGameStat<T:Float> extends GameStat<T> {
+    public var max(default, set):T;
 
-    public function new(max:Float, val:Float = cast 0) {
+    public function new(max:T, val:T = cast 0) {
         @:bypassAccessor this.max = max;
         super(val);
     }
 
-    override function set_value(newVal:Float):Float {
+    override function set_value(newVal:T):T {
         if (newVal > max)
             newVal = max;
         return super.set_value(newVal);
     }
 
-    function set_max(val:Float):Float {
+    function set_max(val:T):T {
         max = val;
         set_value(value);
         return max;
@@ -92,13 +92,14 @@ class CapGameStat<T:Float> extends GameStat<Float> {
     }
 }
 
-class TempIncGameStat<T:Float> extends GameStat<Float> {
-    public var prm(default, null):GameStat<Float>;
-    public var tmp(default, null):GameStat<Float>;
+class TempIncGameStat<T:Float> extends GameStat<T> {
+    public var prm(default, null):GameStat<T>;
+    public var tmp(default, null):GameStat<T>;
 
-    public function new(val:Float, ?prm:GameStat<Float>, ?tmp) {
+    public function new(val:T, ?prm:GameStat<T>, ?tmp) {
         this.prm = prm ?? new GameStat(val);
-        this.tmp = tmp ?? new GameStat(0.);
+        this.tmp = tmp ?? new GameStat(val);
+        this.tmp.value = cast 0;
         super(val);
         this.prm.onChange.listen(dispatch);
         this.tmp.onChange.listen(dispatch);
@@ -108,18 +109,18 @@ class TempIncGameStat<T:Float> extends GameStat<Float> {
         onChange.dispatch(d);
     }
 
-    override function get_value():Float {
+    override function get_value():T {
         return prm.value + tmp.value;
     }
 
-    override function set_value(newVal:Float):Float {
+    override function set_value(newVal:T):T {
         return prm.set_value(newVal);
     }
 
     override function load(d:Dynamic) {
         if (!Std.isOfType(d, Float))
             throw 'Cant load $d to TempIncGameStat';
-        tmp.value = 0;
+        tmp.value = cast 0;
         value = d;
     }
 }

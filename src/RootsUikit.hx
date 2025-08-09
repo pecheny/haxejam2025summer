@@ -40,6 +40,12 @@ class RootsUikit extends FlatUikitExtended {
             .withAlign(vertical, Forward)
             .withSize(sfr, .05)
             .build();
+        ctx.textStyles.newStyle(DS.small_text) //        .withAlign(vertical, Center)
+            .withSize(sfr, .07) // .withPadding(horizontal, sfr, 0.1)
+            .withAlign(vertical, Center)
+            .withAlign(horizontal, Center)
+            .build();
+
         ctx.textStyles.newStyle(DS.heading).withSize(sfr, .14).build();
     }
 

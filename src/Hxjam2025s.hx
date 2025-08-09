@@ -1,5 +1,8 @@
 package;
 
+import bootstrap.DefNode;
+import loops.llevelup.LevelupData;
+import loops.llevelup.LevelUpActivity.LevelingStats;
 import i18n.RootsI18n;
 import i18n.I18n;
 import stset.Stats.StatsSet;
@@ -23,12 +26,15 @@ class Hxjam2025s extends BootstrapMain {
         var grid = new Grid(100, 100, 10, 10);
         rootEntity.addComponent(grid);
         rootEntity.addComponentByType(I18n, new RootsI18n());
+        rootEntity.addComponent(new LevelingDef(new DefNode("levelups", openfl.utils.Assets.getLibrary("")).get));
         var sel = Selection.getOrCreate(rootEntity);
         sel.value = -1;
         var state = rootEntity.addComponent(new GroundsState());
         state.load(Json.parse(Assets.getText("state.json")));
         rootEntity.addComponent(state.resources);
         rootEntity.addComponent(state.flower);
+        rootEntity.addComponent(new LevelingStats(state.flower));
+
         var ctx = rootEntity.addComponent(new ExecCtx(rootEntity));
         rootEntity.addComponent(new Executor(ctx.vars, true));
 
@@ -37,6 +43,7 @@ class Hxjam2025s extends BootstrapMain {
         rootEntity.addComponent(view);
         rootEntity.addComponent(view.managing);
         var run = new RootsGame(new Entity("roots game"), view.ph);
+        run.entity.addComponent(@:privateAccess view.switcher.switcher);
         runSwitcher.switchTo(run);
         run.reset();
         run.startGame();
