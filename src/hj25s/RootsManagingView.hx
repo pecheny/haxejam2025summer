@@ -28,7 +28,7 @@ class RootsManagingView extends BaseDkit {
 
     static var SRC = <roots-managing-view vl={PortionLayout.instance}>
     
-        <label(b().v(sfr, .15).b()) text={"Controls settings"} />
+        <label(b().v(sfr, .15).b()) public id="title" text={"Controls settings"} />
         <base(b().v(pfr, 1).b()) public id="canvas">
             // ${fui.quad(__this__.ph,0xffc31e9a)}
             ${grounds = new GroundsView(__this__.ph)}
@@ -74,6 +74,10 @@ class GroundsView extends Widget {
     }
 
     function hlSelection() {
+        if (selection.value < 0) {
+            hlCells([]);
+            return;
+        }
         var data = state.frags[selection.value];
         var cells = grid.getIntersectingCells(data.pos, data.end);
         hlCells(cells);

@@ -23,6 +23,9 @@ class ExecCtx extends Component {
         return vars;
     }
 
+    public function enlarge(len) {}
+
+    public function addFork() {}
 
     public function addFrag(len:Float) {
         if (selection.value < 0)
@@ -32,7 +35,7 @@ class ExecCtx extends Component {
         var frag = new RootFragment();
         frag.end.set(0, len);
         frag.end.angle = papaDir.angle;
-        frag.end.rotate((Math.random() - 0.5) * Math.PI/4 );
+        frag.end.rotate((Math.random() - 0.5) * Math.PI / 4);
         frag.end += papa.end;
         frag.pos += papa.end;
         state.frags.push(frag);

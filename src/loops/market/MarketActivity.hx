@@ -1,5 +1,7 @@
 package loops.market;
 
+import hj25s.Selection;
+import hj25s.RootsManagingView;
 import hj25s.GroundsState.Resources;
 import bootstrap.Executor;
 import fu.Signal;
@@ -17,6 +19,8 @@ class MarketActivity extends GameRunBase implements ActHandler<MarketDesc> imple
     @:once var stats:Resources;
     @:once var executor:Executor;
     @:once var gui:MarketGui;
+    @:once var managingGui:RootsManagingView;
+    @:once var selection:Selection;
     var data:MarketDesc;
     var items:Array<MarketItemRecord>;
 
@@ -40,12 +44,17 @@ class MarketActivity extends GameRunBase implements ActHandler<MarketDesc> imple
     }
 
     function onChoise(n) {
+        if (selection.value < 0) {
+            managingGui.title.text = "Select the root fragment!";
+            return;
+        }
+
         var item = items[n];
         if (!isAvailable(item.data))
             return;
         stats.wtr.value -= item.data.price;
         item.setState(sold);
-        if (item.data.actions!=null)
+        if (item.data.actions != null)
             for (act in item.data.actions)
                 executor.run(act);
         // todo this check available right in gui now, put it there

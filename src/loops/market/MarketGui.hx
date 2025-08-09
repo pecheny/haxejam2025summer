@@ -1,5 +1,6 @@
 package loops.market;
 
+import i18n.I18n;
 import fu.ui.scroll.WheelHandler;
 import fu.ui.scroll.ScrollboxInput;
 import shimp.InputSystem.InputSystemTarget;
@@ -24,20 +25,17 @@ class MarketWidget extends BaseDkit implements MarketGui {
     public var onChoice(default, null) = new IntSignal();
 
     static var SRC = <market-widget vl={PortionLayout.instance}>
-        <base(b().v(pfr, .1).b()) />
-
         <data-container(b().v(pfr, 1).b()) scroll={true} id="cardsContainer"   itemFactory={cardFactory} inputFactory={inputFactory} layouts={GuiStyles.L_VERT_BUTTONS }>
-            ${new WheelHandler(__this__.ph, horizontal)}
+            ${new WheelHandler(__this__.ph, vertical)}
         </data-container>
 
-        <base(b().v(pfr, .1).b()) />
         <button(b().h(sfr, .36).v(sfr, .12).b())   text={ "Done" } onClick={onOkClick} style={"small-text-center"} />
     </market-widget>;
 
     var maxNumber:Int;
 
     function cardFactory() {
-        var mc = new MarketCard(b().v(sfr, 0.3).h(sfr, 0.3).t(1).b("card"));
+        var mc = new MarketCard(b().v(sfr, 0.2).h(sfr, 0.3).t(1).b("card"));
         new ButtonScale(mc.entity);
         return mc;
     }
@@ -61,9 +59,11 @@ class MarketWidget extends BaseDkit implements MarketGui {
 
 class MarketCard extends BaseDkit implements DataView<MarketItemRecord> {
     @:once var toggle:EnabledProp;
+    @:once var i18n:I18n;
     var descr:MarketItemRecord;
 
     static var SRC = <market-card vl={PortionLayout.instance} >
+        ${fui.quad(__this__.ph.grantInnerTransformPh(), 0)}
         <base(b().v(pfr, 0.2).b()) />
         <switcher(b().v(pfr, 1).b()) id="content"   >
             <label(b().v(pfr, 0.2).b()) id="soldCard" text={"X"} align={Align.Center} />
@@ -76,6 +76,7 @@ class MarketCard extends BaseDkit implements DataView<MarketItemRecord> {
         if (this.descr != null)
             this.descr.onChange.remove(onChange);
         this.descr = descr;
+        card.text = descr.data.descr;
         descr.onChange.listen(onChange);
         onChange(descr.state);
     }
@@ -93,6 +94,6 @@ class MarketCard extends BaseDkit implements DataView<MarketItemRecord> {
     }
 
     function getCaption(d:MarketItem) {
-        return d.price + " gld";
+        return i18n.tags("<wtr/>") + d.price;
     }
 }

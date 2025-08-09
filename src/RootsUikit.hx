@@ -53,7 +53,7 @@ class RootsUikit extends FlatUikitExtended {
         super.regLayouts(e);
 
         var contLayouts = e.getComponent(ContainerStyler);
-        var distributer = new PortionLayout(Center, new FixedSize(0.1));
+        var distributer = new PortionLayout(Forward, new FixedSize(0.1));
         contLayouts.reg(GuiStyles.L_HOR_CARDS, distributer, WholefillLayout.instance);
         contLayouts.reg(GuiStyles.L_VERT_BUTTONS, WholefillLayout.instance, distributer);
     }

@@ -1,0 +1,17 @@
+[
+    {
+        "actions": ["addFrag(10)"],
+        "price": 10,
+        "descr":"New branch"
+    },
+    {
+        "actions": ["addFork(10)"],
+        "price": 10,
+        "descr":"Add fork"
+    },
+    {
+        "actions": ["enlarge(10)"],
+        "price": 10,
+        "descr":"Enlarge branch"
+    }
+]

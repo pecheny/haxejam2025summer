@@ -1,5 +1,6 @@
 package hj25s;
 
+import openfl.Assets;
 import ec.Entity;
 import loops.market.MarketGui.MarketWidget;
 import loops.market.MarketActivity;
@@ -32,14 +33,13 @@ class RootsManagingRun extends GameRunBase {
         // trace(state);
         // var dump = state.dump();
         // sys.io.File.saveContent("state.json", Json.stringify(dump, null, " "));
+        selection.onChange.listen(()->view.title.text="");
         view.roots.rootClick.listen(select);
     }
     
     override function startGame() {
-        market.initDescr([{
-            "actions": ["addFrag(10)"],
-            "price": 10
-        }]);
+        market.initDescr(Json.parse(Assets.getText("cards.json")));
+        select(-1);
         market.startGame();
     }
     
