@@ -14,5 +14,6 @@ class TurnLoop extends SequenceRun {
         super.init();
         addActivity(new RootsManagingRun(new Entity("managing"), Builder.widget()));
         addActivity(new SimulationRun(new Entity("simulation"), Builder.widget()));
+        addActivity(new GrowsRun(new Entity("grows"), Builder.widget()));
     }
 }
