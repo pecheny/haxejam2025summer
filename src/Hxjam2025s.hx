@@ -23,7 +23,8 @@ class Hxjam2025s extends BootstrapMain {
         var grid = new Grid(100, 100, 10, 10);
         rootEntity.addComponent(grid);
         rootEntity.addComponentByType(I18n, new RootsI18n());
-        Selection.getOrCreate(rootEntity);
+        var sel = Selection.getOrCreate(rootEntity);
+        sel.value = -1;
         var state = rootEntity.addComponent(new GroundsState());
         state.load(Json.parse(Assets.getText("state.json")));
         rootEntity.addComponent(state.resources);
