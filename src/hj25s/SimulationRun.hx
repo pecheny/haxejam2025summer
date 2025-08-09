@@ -1,17 +1,19 @@
 package hj25s;
 
+import fu.ui.Properties.EnabledProp;
+import hj25s.SimulationGui.SimulationScreen;
 import fu.Serializable;
 import stset.Stats.CapGameStat;
 import bootstrap.GameRunBase;
 import hj25s.GroundsState;
 
 class SimulationRun extends GameRunBase {
-    @:once
-    var state:GroundsState;
-    @:once
-    var grid:Grid;
+    @:once var state:GroundsState;
+    @:once var grid:Grid;
+    var gui:SimulationScreen;
     var gathering:Array<GatherData> = [];
     var t:Float;
+    var ended = false;
 
     var defaultFragData = {
         gathered: {
@@ -23,7 +25,15 @@ class SimulationRun extends GameRunBase {
         speed: 0.5
     }
 
+    override function init() {
+        super.init();
+        gui = new SimulationScreen(getView());
+        gui.onDone.listen(() -> gameOvered.dispatch());
+    }
+
     override function update(dt:Float) {
+        if(ended)
+            return;
         var step = 1 / 60;
         var hasChange = false;
         for (fd in gathering) {
@@ -49,17 +59,20 @@ class SimulationRun extends GameRunBase {
     }
 
     function onSimulationEnd() {
+        ended = true;
         var d = 0.;
         for (gd in gathering) {
             d += gd.gathered.wtr.value;
         }
         state.resources.wtr.value += d;
-        gameOvered.dispatch();
+        EnabledProp.getOrCreate(gui.okButton.entity).value = true;
     }
 
     override function startGame() {
         refillCells();
         gatherCells();
+        ended = false;
+        EnabledProp.getOrCreate(gui.okButton.entity).value = false;
         super.startGame();
         t = 3;
     }
