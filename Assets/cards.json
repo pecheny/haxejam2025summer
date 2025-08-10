@@ -5,6 +5,11 @@
         "descr":"New branch"
     },
     {
+        "actions": ["incAbsorb(0.5)"],
+        "price": 10,
+        "descr":"Absorber"
+    },
+    {
         "actions": ["addFork(10)"],
         "price": 10,
         "descr":"Add fork"
