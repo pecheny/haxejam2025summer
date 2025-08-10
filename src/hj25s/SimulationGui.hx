@@ -5,10 +5,20 @@ import bootstrap.SelfClosingScreen;
 import dkit.Dkit.BaseDkit;
 import al.layouts.PortionLayout;
 import fancy.widgets.StatsDisplay;
+import hj25s.GroundsState;
+import stset.Stats.StatsSet;
+
 
 class SimulationScreen extends BaseDkit implements SelfClosingScreen {
     static var SRC = <simulation-screen vl={PortionLayout.instance}>
+        <label(b().v(pfr, .15).b()) text={"Total gained:"} />
         <base(b().v(pfr, 0.1).b()) public id="stats">
+            ${new StatsDisplay(__this__.ph)}
+        </base>
+        <label(b().v(pfr, .15).b()) text={"By current root:"} />
+
+        <base(b().v(pfr, 0.1).b()) public id="frag">
+            ${(__this__.ph.entity.addComponentByType(StatsSet, new Resources({})))}
             ${new StatsDisplay(__this__.ph)}
         </base>
         <label(b().v(pfr, .15).b()) public id="lbl" autoSize={true} />

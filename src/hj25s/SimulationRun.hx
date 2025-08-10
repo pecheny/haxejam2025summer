@@ -11,19 +11,31 @@ import hj25s.GroundsState;
 class SimulationRun extends GameRunBase {
     @:once var state:GroundsState;
     @:once var grid:Grid;
+    @:once var selection:Selection;
     var gui:SimulationScreen;
     var gathering:Array<GatherData> = [];
     var t:Float;
     var ended = false;
     var gathered = new Resources({});
 
-
     override function init() {
         super.init();
-        gathered.load({wtr: {max: 100, value:0}});
+        gathered.load({wtr: {max: 100, value: 0}});
         gui = new SimulationScreen(getView());
         gui.stats.entity.addComponentByType(StatsSet, gathered);
         gui.onDone.listen(() -> gameOvered.dispatch());
+
+        selection.onChange.listen(onSelect);
+    }
+
+    function onSelect() {
+        var frag = null;
+        if (selection.value > -1)
+            frag = state.frags[selection.value];
+        if (frag != null)
+            untyped gui.frag.entity.getComponent(StatsSet).load(frag.gathering.gathered.dump());
+        else
+            untyped gui.frag.entity.getComponent(StatsSet).load({wtr: {max: 0, value: 0}});
     }
 
     override function update(dt:Float) {
@@ -39,6 +51,7 @@ class SimulationRun extends GameRunBase {
                 for (cell in fd.cells) {
                     var cellStat = cell.production.get(k);
                     var inc = Math.min(cellStat.value, fd.speed * step);
+                    // trace(inc, (fd.speed * step), fd.speed );
                     var beforeCap = stat.max - stat.value + inc;
                     inc = Math.min(inc, beforeCap);
                     if (inc > 0) {
@@ -90,7 +103,7 @@ class SimulationRun extends GameRunBase {
             var gd = frag.gathering;
             for (k in gd.gathered.keys)
                 gd.gathered.get(k).value = 0;
-            
+
             gd.cells = grid.getIntersectingCells(frag.pos, frag.end).map(idx -> state.cells[idx]);
             gathering.push(gd);
         }
