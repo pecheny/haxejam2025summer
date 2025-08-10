@@ -1,5 +1,6 @@
 package hj25s;
 
+import loops.market.MarketData.MarketDesc;
 import hxmath.math.Vector2;
 import stset.Stats;
 import fu.Signal;
@@ -14,6 +15,7 @@ class GroundsState implements Serializable implements State {
     @:serialize(fixedArray = true) public var cells:Array<GroundCell> = [];
     @:serialize public var resources:Resources = new Resources({});
     @:serialize public var flower:FlowerStats = new FlowerStats({});
+    @:serialize public var market:MarketDesc = [];
     public var fragCreated:Signal<Void->Void> = new Signal();
 
     public function new() {

@@ -10,7 +10,7 @@ import hj25s.GroundsState;
 import bootstrap.GameRunBase;
 
 class RootsManagingRun extends GameRunBase {
-@:once var state:GroundsState;
+    @:once var state:GroundsState;
     @:once var grid:Grid;
     @:once var view:RootsManagingView;
     @:once var executor:Executor;
@@ -21,8 +21,9 @@ class RootsManagingRun extends GameRunBase {
         super(ctx, v);
         var mgui = new MarketWidget(getView());
         entity.addComponentByType(MarketGui, mgui);
-        mgui.onDone.listen(()->gameOvered.dispatch());
+        mgui.onDone.listen(() -> gameOvered.dispatch());
         market = new MarketActivity(new Entity("market"), getView());
+        market.onChange.listen(() -> state.market = market.dump());
         entity.addChild(market.entity);
     }
 
@@ -33,23 +34,21 @@ class RootsManagingRun extends GameRunBase {
         // trace(state);
         // var dump = state.dump();
         // sys.io.File.saveContent("state.json", Json.stringify(dump, null, " "));
-        selection.onChange.listen(()->view.title.text="");
+        selection.onChange.listen(() -> view.title.text = "");
         view.roots.rootClick.listen(select);
     }
-    
+
     override function startGame() {
-        market.initDescr(Json.parse(Assets.getText("cards.json")));
         select(-1);
+        market.initDescr(state.market);
         market.startGame();
     }
-    
+
     override function reset() {
         market.reset();
     }
-    
+
     public function select(idx) {
         selection.value = idx;
     }
-
-
 }

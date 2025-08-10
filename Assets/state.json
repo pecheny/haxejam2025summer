@@ -21,12 +21,13 @@
         }
     ],
     "resources": {
-        "wtr": 100
+        "wtr": 10
     },
     "flower": {
         "hlt": 10,
         "exp": 0,
         "lvl": 0
     },
-    "cells": []
+    "cells": [],
+    "market":[]
 }
