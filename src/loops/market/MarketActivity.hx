@@ -44,12 +44,12 @@ class MarketActivity extends GameRunBase implements ActHandler<MarketDesc> imple
     }
 
     function onChoise(n) {
-        if (selection.value < 0) {
+        var item = items[n];
+        if (selection.value < 0 && (item.data.actions[0].indexOf("addOptions") < 0)) {
             managingGui.title.text = "Select the root fragment!";
             return;
         }
 
-        var item = items[n];
         if (!isAvailable(item.data))
             return;
         stats.wtr.value -= item.data.price;
