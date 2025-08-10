@@ -1,5 +1,6 @@
 package hj25s;
 
+import utils.WeightedRandomProvider;
 import openfl.Assets;
 import haxe.Json;
 import al.Builder;
@@ -23,6 +24,7 @@ class TurnLoop extends SequenceRun {
     }
 
     function rerollMarket() {
-        state.market = Json.parse(Assets.getText("cards.json"));
+        var wgh = new WeightedRandomProvider(Json.parse(Assets.getText("cards.json")));
+        state.market = [for (i in 1...5) cast wgh.get()];
     }
 }
