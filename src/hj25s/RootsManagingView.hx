@@ -184,7 +184,7 @@ class RootFragmentView extends Sprite {
         var caps = openfl.display.CapsStyle.NONE;
         var joints = openfl.display.JointStyle.BEVEL;
 
-        graphics.lineStyle(1 + data.gathering.speed / 2, selected ? 0xffffff : (data.state == alive ? 0x00a070 : 0x313131), 0.9, false, scale, caps, joints);
+        graphics.lineStyle(1 + data.gathering.gathered.wtr.max / 2, selected ? 0xffffff : (data.state == alive ? 0x00a070 : 0x313131), 0.7, false, scale, caps, joints);
         graphics.moveTo(data.pos.x, data.pos.y);
         graphics.lineTo(data.end.x, data.end.y);
         #end

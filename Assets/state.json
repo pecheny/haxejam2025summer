@@ -12,7 +12,7 @@
             "gathering":{
                 "gathered": {
                     "wtr": {
-                        "max": 0.5,
+                        "max": 1.5,
                         "value": 0
                     }
                 },
@@ -21,7 +21,7 @@
         }
     ],
     "resources": {
-        "wtr": 10
+        "wtr": 150
     },
     "flower": {
         "hlt": 10,
@@ -29,5 +29,27 @@
         "lvl": 0
     },
     "cells": [],
-    "market":[]
+    "marketOptions":4,
+    "market":[
+        {
+            "actions": ["addFrag(10)"],
+            "price": 5,
+            "descr": "New branch"
+        },
+        {
+            "actions": ["addFrag(10)"],
+            "price": 5,
+            "descr": "New branch"
+        },
+        {
+            "actions": ["addFork(10)"],
+            "price": 10,
+            "descr": "Add fork"
+        },
+        {
+            "actions": ["enlarge(10)"],
+            "price": 5,
+            "descr": "Enlarge branch by 10"
+        }
+    ]
 }

@@ -1,33 +1,45 @@
 [
     {
         "actions": ["addFrag(10)"],
-        "price": 5,
+        "price": 10,
         "descr": "New branch",
-        "weight": 5
+        "weight": 4
     },
     {
         "actions": ["incAbsorb(0.5)"],
         "price": 10,
         "title": "Absorber",
         "descr": "+0.5 absorbtion",
+        "weight": 3
+    },
+    {
+        "actions": ["mulAbsorb(2)"],
+        "price": 30,
+        "descr": "x2 absorbtion",
         "weight": 1
     },
     {
-        "actions": ["mulAbsorb(0.5)"],
-        "price": 10,
-        "descr": "x2 absorbtion",
-        "weight": 1
+        "actions": ["addOptions()"],
+        "price": 30,
+        "descr": "Add a card to market pool",
+        "weight": 0.5
     },
     {
         "actions": ["addFork(10)"],
         "price": 10,
         "descr": "Add fork",
-        "weight": 1
+        "weight": 4
     },
     {
         "actions": ["enlarge(10)"],
-        "price": 5,
+        "price": 10,
         "descr": "Enlarge branch by 10",
+        "weight": 4
+    },
+    {
+        "actions": ["enlarge(25)"],
+        "price": 20,
+        "descr": "Enlarge branch by 25",
         "weight": 1
     }
 ]

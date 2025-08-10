@@ -16,6 +16,7 @@ class GroundsState implements Serializable implements State {
     @:serialize public var resources:Resources = new Resources({});
     @:serialize public var flower:FlowerStats = new FlowerStats({});
     @:serialize public var market:MarketDesc = [];
+    @:serialize public var marketOptions:Int = 4;
     public var fragCreated:Signal<Void->Void> = new Signal();
 
     public function new() {
@@ -43,7 +44,7 @@ class RootFragment implements Serializable {
         gathering.load({
             gathered: {
                 wtr: {
-                    max: 0.5,
+                    max: 1.5,
                     value: 0
                 }
             },

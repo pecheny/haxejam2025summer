@@ -25,6 +25,6 @@ class TurnLoop extends SequenceRun {
 
     function rerollMarket() {
         var wgh = new WeightedRandomProvider(Json.parse(Assets.getText("cards.json")));
-        state.market = [for (i in 1...5) cast wgh.get()];
+        state.market = [for (i in 0...state.marketOptions) cast wgh.get()];
     }
 }

@@ -38,8 +38,8 @@ class GrowthScreen extends BaseDkit {
         <label(b().v(sfr, .15).b()) text={"Day is over"} />
         <label(b().v(pfr, .15).b()) id="lbl" autoSize={true} />
         <base(b().v(pfr, 0.1).b()) />
-        <button(b().h(sfr, .36).v(sfr, .12).b()) enabled={false} public id="feed" text={ "Feed" }  style={"small-text-center"} />
         <button(b().h(sfr, .36).v(sfr, .12).b()) public id="suffer" text={ "Suffer" }  style={"small-text-center"} />
+        <button(b().h(sfr, .36).v(sfr, .12).b()) enabled={false} public id="feed" text={ "Feed" }  style={"small-text-center"} />
     </growth-screen>
 
 

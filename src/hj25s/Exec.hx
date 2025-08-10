@@ -33,6 +33,10 @@ class ExecCtx extends Component {
         selection.onChange.dispatch();
     }
 
+    public function addOptions() {
+        state.marketOptions++;
+    }
+
     public function incAbsorb(val:Float) {
         if (selection.value < 0)
             return;

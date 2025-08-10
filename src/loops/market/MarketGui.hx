@@ -67,12 +67,13 @@ class MarketCard extends BaseDkit implements DataView<MarketItemRecord> {
         <base(b().v(pfr, 0.2).b()) />
         <switcher(b().v(pfr, 1).b()) id="content"   >
             <label(b().v(pfr, 0.2).b()) id="soldCard" text={"X"} align={Align.Center} />
-            <label(b().v(pfr, 0.2).b()) public id="card"   />
+            <label(b().v(pfr, 0.2).b()) public id="card" autoSize={true} style={DS.small_text}  />
         </switcher>
         <label(b().v(pfr, 0.2).b()) id="lbl" align={Align.Center}  />
     </market-card>;
 
     public function initData(descr:MarketItemRecord) {
+        
         if (this.descr != null)
             this.descr.onChange.remove(onChange);
         this.descr = descr;
