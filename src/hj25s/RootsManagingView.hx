@@ -168,17 +168,22 @@ class RootFragmentView extends Sprite {
     public function new(data:RootFragment) {
         super();
         this.data = data;
+        data.onChange.listen(() -> setState(selected));
         setState(false);
     }
 
+    var selected = false;
+
     public function setState(selected:Bool) {
+        this.selected = selected;
+
         #if (!display)
         graphics.clear();
         var scale = openfl.display.LineScaleMode.NONE;
         var caps = openfl.display.CapsStyle.NONE;
         var joints = openfl.display.JointStyle.BEVEL;
 
-        graphics.lineStyle(1, selected ? 0xffffff : 0x00a070, 1, false, scale, caps, joints);
+        graphics.lineStyle(1 + data.gathering.speed / 2, selected ? 0xffffff : (data.state == alive ? 0x00a070 : 0x313131), 0.9, false, scale, caps, joints);
         graphics.moveTo(data.pos.x, data.pos.y);
         graphics.lineTo(data.end.x, data.end.y);
         #end
@@ -204,12 +209,14 @@ class CellView extends BaseDkit {
 
     public function initData(data:GroundCell) {
         this.data = data;
+        if (entity.hasComponent(StatsSet))
+            entity.removeComponent(StatsSet);
         entity.addComponentByType(StatsSet, data.production);
         setHl(false);
     }
 
     public function setHl(val:Bool) {
-        var alpha = 1 +(Math.floor(253 * data.production.wtr.max / 5) );
-        colors.setColor(val ? 0xff01361b : 0x003898 + (alpha<< 24));
+        var alpha = 1 + (Math.floor(253 * data.production.wtr.max / 5));
+        colors.setColor(val ? 0xff01361b : 0x003898 + (alpha << 24));
     }
 }
