@@ -8,7 +8,7 @@
 
     <meta title="Taking root. Literally." package="com.shoo.hxjam2025s" version="1.0.0" company="pecheny"/>
     <!-- <app main="Main" path="${builds_folder}/Export" file="jidungeon"/> -->
-    <app main="Hxjam2025s" path="${builds_folder}/Export" file="jidungeon"/>
+    <app main="Hxjam2025s" path="${builds_folder}/Export" file="Hxjam2025s"/>
 
     <window antialiasing="4"/>
     <window background="#252525" fps="120" width="900" height="700" unless="html5"/>
@@ -42,7 +42,6 @@
     <!-- <haxeflag name="-dce" value="no"/> -->
     <haxeflag name="-D" value="message.reporting=classic" />
     <haxeflag name="--macro" value='domkit.Macros.registerComponentsPath("dkit.Dkit.$Dkit")'/>
-    <haxeflag name="--macro" value='domkit.Macros.registerComponentsPath("dungsmpl.gui.$")'/>
 
     <haxeflag name="-D" value="no-deprecation-warnings" />
     <!-- <library path="Assets/art.swf" preload="true" generate="true"/> -->
