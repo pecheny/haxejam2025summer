@@ -122,7 +122,7 @@ class RootsView extends Widget {
         spr.addEventListener(MouseEvent.CLICK, onClick);
         new SpriteAspectKeeper(ph, spr);
         selection.onChange.listen(select);
-        state.fragCreated.listen(() -> addView(state.frags[state.frags.length-1]));
+        state.fragCreated.listen(() -> addView(state.frags[state.frags.length - 1]));
     }
 
     public function initData(frags:Array<RootFragment>) {
@@ -194,6 +194,7 @@ class CellView extends BaseDkit {
     </cell-view>
 
     var sd:StatsDisplay;
+    var data:GroundCell;
 
     override function init() {
         super.init();
@@ -202,14 +203,13 @@ class CellView extends BaseDkit {
     }
 
     public function initData(data:GroundCell) {
-        // lbl.text = "" + data.production.wtr.value;
+        this.data = data;
         entity.addComponentByType(StatsSet, data.production);
-        DebugInit.initCheck.listen((_) -> {
-            trace(sd);
-        });
+        setHl(false);
     }
 
     public function setHl(val:Bool) {
-        colors.setColor(val ? 0xff0000ff : 0x200000ff);
+        var alpha = 1 +(Math.floor(253 * data.production.wtr.max / 5) );
+        colors.setColor(val ? 0xff01361b : 0x003898 + (alpha<< 24));
     }
 }
