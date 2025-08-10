@@ -12,13 +12,13 @@ class RootsGame extends GameRunBase {
     @:once var view:GameScreen;
     @:once var fui:FuiBuilder;
     @:once var switcher:WidgetSwitcher<Axis2D>;
-    
+
     var loop:GameRun;
-    
+
     override function init() {
         super.init();
         loop = new TurnLoop(new Entity("roots run"), getView(), @:privateAccess view.switcher.switcher);
-        loop.gameOvered.listen(()->gameOvered.dispatch());
+        loop.gameOvered.listen(() -> gameOvered.dispatch());
         entity.addChild(loop.entity);
     }
 
@@ -29,11 +29,11 @@ class RootsGame extends GameRunBase {
         view.managing.grounds.initData(state.cells);
         loop.startGame();
     }
-    
+
     override function reset() {
         loop.reset();
     }
-    
+
     override function update(dt:Float) {
         loop.update(dt);
     }

@@ -1,5 +1,6 @@
 package hj25s;
 
+import i18n.I18n;
 import dkit.Dkit.BaseDkit;
 import bootstrap.Data;
 import stset.Stats;
@@ -27,13 +28,15 @@ import al.layouts.PortionLayout;
 
 typedef GrowsGuiDesc = {
     ?damage:Float,
+
     spent:LevelSpendings,
 }
 
 class GrowthScreen extends BaseDkit {
+    @:once var i18n:I18n;
     static var SRC = <growth-screen vl={PortionLayout.instance}>
         <label(b().v(sfr, .15).b()) text={"Day is over"} />
-        <label(b().v(pfr, .15).b()) id="lbl" />
+        <label(b().v(pfr, .15).b()) id="lbl" autoSize={true} />
         <button(b().h(sfr, .36).v(sfr, .12).b()) id="okButton" text={ "Done" } onClick={onOkClick} style={"small-text-center"} />
     </growth-screen>
 
@@ -44,10 +47,11 @@ class GrowthScreen extends BaseDkit {
     }
 
     public function initData(desc:GrowsGuiDesc) {
+        lbl.text = "Flower needs: " +i18n.tags([for (k=> v in desc.spent.keyValueIterator()) '<$k/> $v'].join(" ")) + "<br/>";
         if (desc.damage != null && desc.damage > 0) {
-            lbl.text = 'Due to insufficient resource the flower loses ${desc.damage} hp';
+            lbl.text += 'Due to insufficient resource the flower loses ${desc.damage} hp';
         } else {
-            lbl.text = 'All the flower needs fulfilled';
+            lbl.text += 'All the flower needs fulfilled';
         }
     }
 }
