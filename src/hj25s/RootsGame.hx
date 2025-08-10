@@ -24,7 +24,6 @@ class RootsGame extends GameRunBase {
 
     override function startGame() {
         super.startGame();
-        createGrounds();
         view.managing.roots.initData(state.frags);
         view.managing.grounds.initData(state.cells);
         loop.startGame();
@@ -38,14 +37,4 @@ class RootsGame extends GameRunBase {
         loop.update(dt);
     }
 
-    public function createGrounds() {
-        state.cells.resize(0);
-        for (i in 0...grid.numCells()) {
-            var cell = new GroundCell();
-            if (Math.random() > 0.5)
-                cell.production.wtr.max = Std.int(1 + Math.random() * 5);
-            cell.production.wtr.value = cell.production.wtr.max;
-            state.cells.push(cell);
-        }
-    }
 }

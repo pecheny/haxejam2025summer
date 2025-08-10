@@ -56,4 +56,25 @@ class Hxjam2025s extends LifecycleImpl {
         // run.reset();
         // run.startGame();
     }
+
+    override function newGame() {
+        var data = Json.parse(openfl.utils.Assets.getText("state.json"));
+        rootEntity.getComponent(State).load(data);
+        createGrounds();
+        run.reset();
+        launch();
+    }
+
+    public function createGrounds() {
+        var state = rootEntity.getComponent(GroundsState);
+        var grid = rootEntity.getComponent(Grid);
+        state.cells.resize(0);
+        for (i in 0...grid.numCells()) {
+            var cell = new GroundCell();
+            if (Math.random() > 0.5)
+                cell.production.wtr.max = Std.int(1 + Math.random() * 5);
+            cell.production.wtr.value = cell.production.wtr.max;
+            state.cells.push(cell);
+        }
+    }
 }
