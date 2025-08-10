@@ -126,6 +126,7 @@ class RootsView extends Widget {
     }
 
     public function initData(frags:Array<RootFragment>) {
+        reset();
         for (data in frags) {
             addView(data);
         }
@@ -217,6 +218,6 @@ class CellView extends BaseDkit {
 
     public function setHl(val:Bool) {
         var alpha = 1 + (Math.floor(253 * data.production.wtr.max / 5));
-        colors.setColor(val ? 0xff01361b : 0x003898 + (alpha << 24));
+        colors.setColor(val ? 0xff008440 : 0x003898 + (alpha << 24));
     }
 }

@@ -33,6 +33,11 @@ class Hxjam2025s extends LifecycleImpl {
         var sel = Selection.getOrCreate(rootEntity);
         sel.value = -1;
         var state = rootEntity.addComponent(new GroundsState());
+        for (i in 0...grid.numCells()) {
+            var cell = new GroundCell();
+            state.cells.push(cell);
+        }
+
         // state.load(Json.parse(Assets.getText("state.json")));
         rootEntity.addComponentByType(State, state);
         rootEntity.addComponent(state.resources);
@@ -68,13 +73,13 @@ class Hxjam2025s extends LifecycleImpl {
     public function createGrounds() {
         var state = rootEntity.getComponent(GroundsState);
         var grid = rootEntity.getComponent(Grid);
-        state.cells.resize(0);
         for (i in 0...grid.numCells()) {
-            var cell = new GroundCell();
+            var cell = state.cells[i];
             if (Math.random() > 0.5)
                 cell.production.wtr.max = Std.int(1 + Math.random() * 5);
+            else
+                cell.production.wtr.max = 0;
             cell.production.wtr.value = cell.production.wtr.max;
-            state.cells.push(cell);
         }
     }
 }
