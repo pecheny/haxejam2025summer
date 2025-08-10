@@ -23,13 +23,29 @@ class ExecCtx extends Component {
         return vars;
     }
 
-    public function enlarge(len) {}
-    
+    public function enlarge(len) {
+        if (selection.value < 0)
+            return;
+        var papa = state.frags[selection.value];
+        var fromZero = (papa.end - papa.pos);
+        papa.end += fromZero.normalizeTo(len);
+        papa.onChange.dispatch();
+        selection.onChange.dispatch();
+    }
+
     public function incAbsorb(val:Float) {
         if (selection.value < 0)
             return;
         var papa = state.frags[selection.value];
-        papa.gathering.speed += val;
+        papa.gathering.gathered.wtr.max += val;
+        papa.onChange.dispatch();
+    }
+
+    public function mulAbsorb(val:Float) {
+        if (selection.value < 0)
+            return;
+        var papa = state.frags[selection.value];
+        papa.gathering.gathered.wtr.max *= val;
         papa.onChange.dispatch();
     }
 
@@ -37,12 +53,12 @@ class ExecCtx extends Component {
         if (selection.value < 0)
             return;
         var papa = state.frags[selection.value];
-        var dev = 1/4;
+        var dev = 1 / 4;
         var len = 3 + Math.random() * 8;
-        var frag = createFrag(papa.end, (papa.end - papa.pos).rotate(  Math.PI * dev).angle, len);
+        var frag = createFrag(papa.end, (papa.end - papa.pos).rotate(Math.PI * dev).angle, len);
         regFrag(frag, papa);
         len = 3 + Math.random() * 8;
-        frag = createFrag(papa.end, (papa.end - papa.pos).rotate( - Math.PI * dev).angle, len);
+        frag = createFrag(papa.end, (papa.end - papa.pos).rotate(-Math.PI * dev).angle, len);
         regFrag(frag, papa);
     }
 
@@ -65,7 +81,7 @@ class ExecCtx extends Component {
 
     function regFrag(frag:RootFragment, ?papa:RootFragment) {
         frag.parent = state.frags.indexOf(papa);
-        if (papa!=null) {
+        if (papa != null) {
             papa.children.push(state.frags.length);
         }
         state.frags.push(frag);

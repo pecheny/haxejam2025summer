@@ -1,22 +1,33 @@
 [
     {
         "actions": ["addFrag(10)"],
-        "price": 10,
-        "descr":"New branch"
+        "price": 5,
+        "descr": "New branch",
+        "weight": 5
     },
     {
         "actions": ["incAbsorb(0.5)"],
         "price": 10,
-        "descr":"Absorber"
+        "title": "Absorber",
+        "descr": "+0.5 absorbtion",
+        "weight": 1
+    },
+    {
+        "actions": ["mulAbsorb(0.5)"],
+        "price": 10,
+        "descr": "x2 absorbtion",
+        "weight": 1
     },
     {
         "actions": ["addFork(10)"],
         "price": 10,
-        "descr":"Add fork"
+        "descr": "Add fork",
+        "weight": 1
     },
     {
         "actions": ["enlarge(10)"],
-        "price": 10,
-        "descr":"Enlarge branch"
+        "price": 5,
+        "descr": "Enlarge branch by 10",
+        "weight": 1
     }
 ]
