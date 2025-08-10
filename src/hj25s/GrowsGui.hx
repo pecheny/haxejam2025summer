@@ -37,6 +37,7 @@ class GrowthScreen extends BaseDkit {
     static var SRC = <growth-screen vl={PortionLayout.instance}>
         <label(b().v(sfr, .15).b()) text={"Day is over"} />
         <label(b().v(pfr, .15).b()) id="lbl" autoSize={true} />
+        <base(b().v(pfr, 0.1).b()) />
         <button(b().h(sfr, .36).v(sfr, .12).b()) id="okButton" text={ "Done" } onClick={onOkClick} style={"small-text-center"} />
     </growth-screen>
 

@@ -12,6 +12,7 @@ class SimulationScreen extends BaseDkit implements SelfClosingScreen {
             ${new StatsDisplay(__this__.ph)}
         </base>
         <label(b().v(pfr, .15).b()) public id="lbl" autoSize={true} />
+        <base(b().v(pfr, 0.1).b()) />
         <button(b().h(sfr, .36).v(sfr, .12).b()) public id="okButton"  enabled={false} text={ "Done" } onClick={onOkClick} style={"small-text-center"} />
  </simulation-screen>
 
