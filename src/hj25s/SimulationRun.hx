@@ -1,5 +1,6 @@
 package hj25s;
 
+import stset.Stats.StatsSet;
 import fu.ui.Properties.EnabledProp;
 import hj25s.SimulationGui.SimulationScreen;
 import fu.Serializable;
@@ -14,6 +15,7 @@ class SimulationRun extends GameRunBase {
     var gathering:Array<GatherData> = [];
     var t:Float;
     var ended = false;
+    var gathered = new Resources({});
 
     var defaultFragData = {
         gathered: {
@@ -27,27 +29,35 @@ class SimulationRun extends GameRunBase {
 
     override function init() {
         super.init();
+        gathered.load({wtr: {max: 100, value:0}});
         gui = new SimulationScreen(getView());
+        gui.stats.entity.addComponentByType(StatsSet, gathered);
         gui.onDone.listen(() -> gameOvered.dispatch());
     }
 
     override function update(dt:Float) {
-        if(ended)
+        if (ended)
             return;
         var step = 1 / 60;
         var hasChange = false;
         for (fd in gathering) {
             // TODO all res
-            if (fd.gathered.wtr.value >= fd.gathered.wtr.max)
-                continue;
-            for (cell in fd.cells) {
-                var inc = Math.min(cell.production.wtr.value, fd.speed * step);
-                var beforeCap = fd.gathered.wtr.max - fd.gathered.wtr.value + inc;
-                inc = Math.min(inc, beforeCap);
-                if (inc > 0) {
-                    hasChange = true;
-                    cell.production.wtr.value -= inc;
-                    fd.gathered.wtr.value += inc;
+            for (k in fd.gathered.keys) {
+                var stat:CapGameStat<Float> = cast fd.gathered.get(k);
+
+                if (stat.value >= stat.max)
+                    continue;
+                for (cell in fd.cells) {
+                    var cellStat = cell.production.get(k);
+                    var inc = Math.min(cellStat.value, fd.speed * step);
+                    var beforeCap = stat.max - stat.value + inc;
+                    inc = Math.min(inc, beforeCap);
+                    if (inc > 0) {
+                        gathered.get(k).value += inc;
+                        hasChange = true;
+                        cellStat.value -= inc;
+                        stat.value += inc;
+                    }
                 }
             }
         }
@@ -97,6 +107,9 @@ class SimulationRun extends GameRunBase {
 
     override function reset() {
         super.reset();
+        for (k in gathered.keys) {
+            gathered.get(k).value = 0;
+        }
         gathering.resize(0);
     }
 }
