@@ -27,7 +27,6 @@ class GrowsRun extends GameRunBase {
         gui = new GrowthScreen(getView());
         gui.onDone.listen(onEnd);
         var lvgui = new LevelupGui2(Builder.widget());
-        // lvgui.entity.addComponent(fui.textStyles.getStyle(DS.small_text));
         lvlup = new LevelUpActivity(new Entity("lvlup"), lvgui.ph);
         entity.addChild(lvlup.entity);
         lvlup.entity.addComponentByType(OptionPickerGui, lvgui);
@@ -67,13 +66,15 @@ class GrowsRun extends GameRunBase {
             var delta = r.value - v;
             if (delta < 0) {
                 r.value = 0;
-                damage += delta;
+                damage -= delta;
             } else {
                 r.value -= v;
             }
         }
         if (damage == 0)
             flower.exp.value++;
-        gui.initData({damage: damage, spent: spending});
+        else
+            flower.hlt.value -= Math.floor(damage);
+        gui.initData({damage: Math.floor(damage), spent: spending});
     }
 }
