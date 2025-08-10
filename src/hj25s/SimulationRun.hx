@@ -17,15 +17,6 @@ class SimulationRun extends GameRunBase {
     var ended = false;
     var gathered = new Resources({});
 
-    var defaultFragData = {
-        gathered: {
-            wtr: {
-                max: 0.5,
-                value: 0
-            }
-        },
-        speed: 0.5
-    }
 
     override function init() {
         super.init();
@@ -41,10 +32,8 @@ class SimulationRun extends GameRunBase {
         var step = 1 / 60;
         var hasChange = false;
         for (fd in gathering) {
-            // TODO all res
             for (k in fd.gathered.keys) {
                 var stat:CapGameStat<Float> = cast fd.gathered.get(k);
-
                 if (stat.value >= stat.max)
                     continue;
                 for (cell in fd.cells) {
@@ -98,9 +87,11 @@ class SimulationRun extends GameRunBase {
 
     function gatherCells() {
         for (frag in state.frags) {
-            var gd = new GatherData();
+            var gd = frag.gathering;
+            for (k in gd.gathered.keys)
+                gd.gathered.get(k).value = 0;
+            
             gd.cells = grid.getIntersectingCells(frag.pos, frag.end).map(idx -> state.cells[idx]);
-            gd.load(defaultFragData);
             gathering.push(gd);
         }
     }
@@ -112,12 +103,4 @@ class SimulationRun extends GameRunBase {
         }
         gathering.resize(0);
     }
-}
-
-class GatherData implements Serializable {
-    @:serialize public var gathered:Resources = new Resources({});
-    @:serialize public var speed:Float;
-    public var cells:Array<GroundCell>;
-
-    public function new() {}
 }

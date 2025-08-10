@@ -21,9 +21,41 @@ class GroundsState implements Serializable implements State {
     }
 }
 
+enum abstract FragState(Int) from Int to Int {
+    var alive;
+    var dead;
+}
+
+@:keep
+class GatherData implements Serializable {
+    @:serialize public var gathered:Resources = new Resources({});
+    @:serialize public var speed:Float;
+    public var cells:Array<GroundCell>;
+
+    public function new() {}
+}
+
 @:keep
 class RootFragment implements Serializable {
-    public function new() {}
+    public function new() {
+        gathering.load({
+            gathered: {
+                wtr: {
+                    max: 0.5,
+                    value: 0
+                }
+            },
+            speed: 0.5
+        });
+    }
+
+    // @:serialize(skipNullLoad = true) 
+    public var parent:Int = -1;
+    // @:serialize(skipNullLoad = true)
+     public var children:Array<Int> = [];
+    // @:serialize(skipNullLoad = true)
+     public var state:FragState = alive;
+    @:serialize public var gathering:GatherData = new GatherData();
 
     @:serialize var _pos:Vec2 = new Vec2(0, 0);
     @:serialize var _end:Vec2 = new Vec2(0, 0);
@@ -49,6 +81,11 @@ class RootFragment implements Serializable {
 
     function get_end():Vector2 {
         return _end;
+    }
+    
+    public function dump() {
+
+    
     }
 }
 
@@ -76,6 +113,7 @@ class Resources implements fu.Serializable implements StatsSet {
     }
 }
 
+@:keep
 class GroundCell implements Serializable {
     @:serialize public var production(default, null):Resources = new Resources({});
 
