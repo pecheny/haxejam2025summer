@@ -1,5 +1,7 @@
 package;
 
+import hj25s.JMenu;
+import hj25s.HelpWindow;
 import al.ec.WidgetSwitcher;
 import bootstrap.Menu;
 import bootstrap.Lifecycle;
@@ -24,11 +26,16 @@ import hj25s.RootsManagingRun;
 import bootstrap.BootstrapMain;
 
 class Hxjam2025s extends LifecycleImpl {
+    var help : HelpWindow;
     public function new() {
         super();
         var grid = new Grid(100, 100, 10, 10);
         rootEntity.addComponent(grid);
         rootEntity.addComponentByType(I18n, new RootsI18n());
+        help = new HelpWindow(Builder.widget());
+        help.onDone.listen(showMenu);
+        help.watch(rootEntity);
+
         rootEntity.addComponent(new LevelingDef(new DefNode("levelups", openfl.utils.Assets.getLibrary("")).get));
         var sel = Selection.getOrCreate(rootEntity);
         sel.value = -1;
@@ -55,7 +62,9 @@ class Hxjam2025s extends LifecycleImpl {
         run.entity.addComponent(@:privateAccess view.switcher.switcher);
         bindRun(run);
         rootEntity.getComponent(WidgetSwitcher).switchTo(run.getView()); // preinit
-        new Menu(menu);
+        rootEntity.addComponentByType(Hxjam2025s, this);
+
+        new JMenu(menu);
         showMenu();
         // runSwitcher.switchTo(run);
         // run.reset();
@@ -81,5 +90,12 @@ class Hxjam2025s extends LifecycleImpl {
                 cell.production.wtr.max = 0;
             cell.production.wtr.value = cell.production.wtr.max;
         }
+    }
+    
+    
+    public function showHelp() {
+        rootEntity.getComponent(WidgetSwitcher).switchTo(help.ph);
+        rootEntity.getComponent(WidgetSwitcher).switchTo(null);
+        rootEntity.getComponent(WidgetSwitcher).switchTo(help.ph);
     }
 }
