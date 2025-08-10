@@ -38,22 +38,20 @@ class GrowthScreen extends BaseDkit {
         <label(b().v(sfr, .15).b()) text={"Day is over"} />
         <label(b().v(pfr, .15).b()) id="lbl" autoSize={true} />
         <base(b().v(pfr, 0.1).b()) />
-        <button(b().h(sfr, .36).v(sfr, .12).b()) id="okButton" text={ "Done" } onClick={onOkClick} style={"small-text-center"} />
+        <button(b().h(sfr, .36).v(sfr, .12).b()) enabled={false} public id="feed" text={ "Feed" }  style={"small-text-center"} />
+        <button(b().h(sfr, .36).v(sfr, .12).b()) public id="suffer" text={ "Suffer" }  style={"small-text-center"} />
     </growth-screen>
 
-    public var onDone:ec.Signal<Void->Void> = new ec.Signal();
-
-    function onOkClick() {
-        onDone.dispatch();
-    }
 
     public function initData(desc:GrowsGuiDesc) {
-        lbl.text = "Flower needs: " +i18n.tags([for (k=> v in desc.spent.keyValueIterator()) '<$k/> $v'].join(" ")) + "<br/>";
-        if (desc.damage != null && desc.damage > 0) {
-            lbl.text += 'Due to insufficient resource the flower loses ${desc.damage} hp';
-        } else {
-            lbl.text += 'All the flower needs fulfilled';
-        }
+        lbl.text = i18n.tags("Flower needs: " + [for (k=> v in desc.spent.keyValueIterator()) '<$k/> $v'].join(" ") + "<br/>"
+        + "You can feed it and gain 1 <exp/> or save the resources and suffer 1 <hlt/>");
+
+        // if (desc.damage != null && desc.damage > 0) {
+        //     lbl.text += 'Due to insufficient resource the flower loses ${desc.damage} hp';
+        // } else {
+        //     lbl.text += 'All the flower needs fulfilled';
+        // }
     }
 }
 

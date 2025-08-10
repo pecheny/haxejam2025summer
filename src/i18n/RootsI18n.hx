@@ -13,11 +13,16 @@ class RootsI18n implements I18n {
     var colors:Map<String, Int> = [
         "<wtr/>" => 0x7bbde1,
         "<hlt/>" => 0xdb6a6a,
+        "<lvl/>" => 0xffaa00,
+        "<exp/>" => 0xffaa00,
+
     ];
     
     var chrs:Map<String, String> = [
         "<wtr/>" => "E",
         "<hlt/>" => "H",
+        "<lvl/>" => "S",
+        "<exp/>" => "G",
     ];
 
 

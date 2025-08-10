@@ -1,5 +1,6 @@
 package hj25s;
 
+import fu.ui.Properties.EnabledProp;
 import al.ec.WidgetSwitcher;
 import fancy.widgets.OptionPickerGui;
 import ec.Entity;
@@ -25,7 +26,9 @@ class GrowsRun extends GameRunBase {
     override function init() {
         super.init();
         gui = new GrowthScreen(getView());
-        gui.onDone.listen(onEnd);
+        gui.feed.onClick = feed;
+        gui.suffer.onClick = suffer;
+        // gui.onDone.listen(onEnd);
         var lvgui = new LevelupGui2(Builder.widget());
         lvlup = new LevelUpActivity(new Entity("lvlup"), lvgui.ph);
         entity.addChild(lvlup.entity);
@@ -41,6 +44,22 @@ class GrowsRun extends GameRunBase {
         } else {
             gameOvered.dispatch();
         }
+    }
+
+    function suffer() {
+        flower.hlt.value--;
+        onEnd();
+    }
+
+    function feed() {
+        var spending = spendings[Std.int(flower.lvl.value)];
+
+        for (k => v in spending.keyValueIterator()) {
+            res.get(k).value -= v;
+        }
+
+        flower.exp.value++;
+        onEnd();
     }
 
     function onEnd() {
@@ -61,20 +80,25 @@ class GrowsRun extends GameRunBase {
     function apply() {
         var spending = spendings[Std.int(flower.lvl.value)];
         var damage = 0.;
+        var enough = true;
         for (k => v in spending.keyValueIterator()) {
-            var r = res.get(k);
-            var delta = r.value - v;
-            if (delta < 0) {
-                r.value = 0;
-                damage -= delta;
-            } else {
-                r.value -= v;
-            }
+            if (res.get(k).value < v)
+                enough = false;
+            // var r = res.get(k);
+            // var delta = r.value - v;
+            // if (delta < 0) {
+            //     r.value = 0;
+            //     damage -= delta;
+            // } else {
+            //     r.value -= v;
+            // }
         }
-        if (damage == 0)
-            flower.exp.value++;
-        else
-            flower.hlt.value -= Math.floor(damage);
+        gui.feed.entity.getComponent(EnabledProp).value = enough;
+        // var damage:Int = Math.round(damage);
+        // if (damage == 0)
+        //     flower.exp.value++;
+        // else
+        //     flower.hlt.value -= damage;
         gui.initData({damage: Math.floor(damage), spent: spending});
     }
 }

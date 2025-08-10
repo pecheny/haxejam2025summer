@@ -77,6 +77,7 @@ class SimulationRun extends GameRunBase {
             d += gd.gathered.wtr.value;
         }
         state.resources.wtr.value += d;
+        onSelect();
         EnabledProp.getOrCreate(gui.okButton.entity).value = true;
     }
 
