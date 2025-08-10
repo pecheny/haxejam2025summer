@@ -42,7 +42,8 @@ class RootsGame extends GameRunBase {
         state.cells.resize(0);
         for (i in 0...grid.numCells()) {
             var cell = new GroundCell();
-            cell.production.wtr.max = Std.int(Math.random() * 5);
+            if (Math.random() > 0.5)
+                cell.production.wtr.max = Std.int(1 + Math.random() * 5);
             cell.production.wtr.value = cell.production.wtr.max;
             state.cells.push(cell);
         }
